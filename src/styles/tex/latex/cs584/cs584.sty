@@ -1,28 +1,28 @@
-%! Package = academics
+%! Package = cs584
 %! Author = Len Washington III
-%! Date = 12/26/23
+%! Date = 8/21/24
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{academics}[2023/12/26 A styling package for the class: ]
+\ProvidesPackage{cs584}[2023/12/26 A styling package for the class: ]
 
 \RequirePackage{kvoptions}
 
 \SetupKeyvalOptions{
-	family=aca,
-	prefix=aca@
+	family=cs,
+	prefix=cs@
 }
 
 \DeclareStringOption{title}
 \DeclareStringOption[Len Washington III]{author}
-\DeclareStringOption[\today]{date}
+\DeclareStringOption[{\today}]{date}
 \DeclareStringOption[]{subject}
 \DeclareStringOption[]{subjectCode}
 
 \ProcessKeyvalOptions*
 
-\RequirePackage[author=\aca@author,
-	title=\aca@title,
-	date=\aca@date,
-	subject=\aca@subject,
-	code=\aca@subjectCode
+\RequirePackage[author=\cs@author,
+	title=\cs@title,
+	date={\cs@date},
+	subject=\cs@subject,
+	code=\cs@subjectCode
 ]{iitacademics}
