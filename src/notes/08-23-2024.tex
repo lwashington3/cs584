@@ -1,0 +1,163 @@
+%! Author = Len Washington III
+%! Date = 8/23/24
+
+% Preamble
+\documentclass[
+	title={ML Fundamentals}
+]{cs584notes}
+\newcommand{\learningtask}[3]{%
+	\begin{description}
+		\item[$T$]: #1
+		\item[$P$]: #2
+		\item[$E$]: #3
+	\end{description}
+	\vspace*{0.25em}
+}
+
+% Document
+\begin{document}
+
+%\maketitle
+
+\tableofcontents
+
+\section{Supervised Learning}\label{sec:supervised-learning}
+Have a dataset with defined outputs that the system can be trained to predict.
+
+\section{Unsupervised Learning}\label{sec:unsupervised-learning}
+Have a large amount of data with no defined labels.
+The model should be able to identify similar groups even if those groups aren't predefined.
+
+\section{Reinforcement Learning}\label{sec:reinforcement-learning}
+The agent that needs to learn, will generate its own data through freely interacting with the environment.
+Through its own experience, it will generate data which it can learn off of.
+
+\section{Transfer Learning}\label{sec:transfer-learning}
+A model trained off of dataset $D_{1}$ can be retrained with dataset $D_{2}$ to add more knowledge to the model.
+This means that a model does not have to be trained from scratch.
+
+\section{Performance Measure, $P$}\label{sec:performance-measure-$p$}
+\begin{description}[font=\color{emphblue}]
+	\item[Accuracy:] The \emph{proportion} of examples for which the \emph{model produces} the \emph{correct output}.
+	\item[Error rate:] The \emph{proportion} of examples for which the \emph{model produces} an \emph{incorrect output}.
+	\item[Loss function:] Quantifies the \emph{difference} between the \emph{predicted outputs} of a machine learning algorithm and the \emph{actual target values.}
+	\item[Generalization] Ability to \emph{perform well} on previously \emph{unobserved data}; e.g., \emph{evaluate} the \emph{performance} using a \emph{test set}.
+\end{description}
+
+\section{No Free Lunch Theorem}\label{sec:no-free-lunch-theorem}
+\begin{itemize}
+	\item \definition{``No Free Lunch Theorem''}{without having substantive information about the modeling problem, there is \emph{no single model} that will always \emph{do better than any other model}.}
+	\item The \emph{goal} of machine learning research is not to seek a universal learning algorithm or the absolute best learning algorithm.
+	\item Instead, out goal is to understand what kinds of distributions are relevant to the real world and what kinds of machine learning algorithms perform well on data drawn distributions we care about.
+\end{itemize}
+
+\section{Training and Testing}\label{sec:training-and-testing}
+\begin{itemize}
+	\item \definition{Training data}{used to \emph{train} the machine learning model}.
+	\item \definition{Testing data}{used to determine the performance of the trained model.}
+\end{itemize}
+
+\subsection{Independent and Identically Distributed (IID) assumptions}\label{subsec:independent-and-identically-distributed-(iid)-assumptions}
+\begin{itemize}
+	\item Examples in each dataset are independent from each other
+	\item Training and testing set are identically distributed; i.e., drawn from the same probability distribution as each other.
+\end{itemize}
+
+\section{Fitting}\label{sec:fitting}
+\begin{itemize}
+	\item \definition{Underfitting}{when the model is \emph{unable} to \emph{obtain} a sufficiently low training value.}
+	\item \definition{Overfitting}{when the \emph{gap} between the \emph{training error} and \emph{test error} is too large.}
+	\item \definition{Hypothesis}{the machine's presumption regarding the connection between the input features and the output.}
+\end{itemize}
+
+Consider a \emph{hypothesis \data{$h$}} and its$\dots$
+\begin{itemize}
+	\item Error rate over training data: \data{$error_{train}(h)$}
+	\item True error rate over all data: \data{$error_{true}(h)$}
+\end{itemize}
+
+Hypothesis \data{$h$} \emph{overfits} the training error if there is an alternative hypothesis \data{$h'$} such that
+\data{\begin{equation}
+\begin{aligned}
+	error_{train}(h) &< error_{train}(h')\\
+	error_{true}(h) &> error_{true}(h')
+\end{aligned}\label{eq:hypothesis}
+\end{equation}}
+
+\subsection{Resolving Underfitting}\label{subsec:resolving-underfitting}
+\begin{itemize}
+	\item \emph{Increasing} model \emph{complexity}.
+	\item Using a different ML \emph{algorithm}.
+	\item Increasing the amount of \emph{training data}.
+	\item \emph{Ensemble methods} to combine multiple methods to create better outputs.
+	\item \emph{Feature engineering} for \emph{creating new model features} from the existing ones that may be more relevant to the learning task.
+\end{itemize}
+
+\subsection{Resolving Overfitting}\label{subsec:resolving-overfitting}
+\begin{itemize}
+	\item \definition{Cross-Validation}{a technique for evaluating ML models by \emph{training several ML models} on \emph{subsets} of the available input data and evaluating them on another subset of the data.}
+	\item \definition{Regularization}{a technique where a \emph{penalty term} is added to the \emph{loss function}, discouraging the model from assigning too much importance to individual features.}
+	\item \definition{Early-stopping}{stops training when a monitored \emph{metric} has \emph{stopped improving.}}
+	\item \definition{Bagging}{\emph{learning multiple models} in parallel and applying \emph{majority voting} to choose the final candidate model.}
+\end{itemize}
+
+\section{Cross-Validation}\label{sec:cross-validation}
+\subsection{\data{$k$}-\emph{fold} cross-validation}\label{subsec:k-fold-cross-validation}
+\begin{itemize}
+	\item Divide data into \data{$k$} \emph{folds}.
+	\item Train on \data{$k-1$} \emph{folds}, use the \data{$k^{\mbox{th}}$} to \emph{measure error}.
+	\item Repeat \data{$k$} \emph{times}; use \emph{average error} to measure generalization accuracy.
+	\item Statistically valid and gives good accuracy estimates.
+\end{itemize}
+
+\subsection{\emph{Leave-one-out} cross validation (LOOCV)}\label{subsec:loocv}
+
+\section{Parametric Learning}\label{sec:parametric-learning}
+\definition{Parametric learning algorithms}{make \emph{strong assumptions} about the form of the \emph{mapping function} between the input features and output.}
+\begin{itemize}
+	\item For example, logistic regression, linear regression, perceptron, na\"ive bayes, neural network.
+	\item \emph{Benefits} of such models are
+	\begin{enumerate}[label=(\alph*)]
+		\item easier to understand and interpret results
+		\item very fast to learn from data
+		\item do not require as much training data
+		\item can work even if they do not fit the data perfectly.
+	\end{enumerate}
+	\item However, by pre-emptively choosing a functional form, these methods are highly constrained to the specified form.
+\end{itemize}
+
+\section{Non-parametric Learning}\label{sec:non-parametric-learning}
+\definition{Non-parametric learning algorithms}{\emph{do not make assumptions} about the form of the \emph{mapping function} between the input features and output.}
+
+\begin{itemize}
+	\item For example, SVM, $k$-NN, $k$-means, decision tree.
+	\item \emph{Benefits} include
+	\begin{enumerate}[label=(\alph*)]
+		\item being capable of fitting a large number of functional forms,
+		\item there are no assumptions about the underlying$\dots$.
+	\end{enumerate}
+\end{itemize}
+
+\section{Model Selection}\label{sec:model-selection}
+\begin{itemize}
+	\item \emph{Adopting} the \emph{best algorithm} and model for a specific dataset by \emph{assessing} and \emph{comparing different models} to identify the one with the \emph{best results.}
+\end{itemize}
+
+\section{AIC/BIC}\label{sec:aic/bic}
+\definition{\emph{Akaike Information Criterion} (AIC) and \emph{Bayesian Information Criterion} (BIC)}{compares different models to choose one that \emph{best fits the data}.}
+\begin{itemize}
+	\item The goal of both AIC and BIC is to \emph{balance} the \emph{goodness-of-fit} of the model with its \emph{complexity}, in order to avoid overfitting or underfitting.
+	\item Both \emph{AIC} and \emph{BIC} \emph{penalize models} with \emph{large number of parameters} relative to the \emph{size} of the \emph{data}, but BIC penalizes more severely.
+	\data{\begin{equation}
+		\begin{aligned}
+			\min AIC &= \min\left\{ 2m - 2\log(L) \right\}\\
+			\min BIC &= \min\left\{ m\log(n) - 2\log(L) \right\}
+		\end{aligned}\label{eq:aic-bic}
+	\end{equation}}
+	where \data{$m$} is the \emph{number} of \emph{model parameters}, \data{$n$} is the \emph{number} of \emph{data points}, and \data{$L$} is the \emph{maximum likelihood} of the model.
+\end{itemize}
+
+\section{Classification}\label{sec:classification}
+
+
+\end{document}
