@@ -1,0 +1,127 @@
+%! Author = Len Washington III
+%! Date = 8/28/24
+
+% Preamble
+\documentclass[
+	title={SVM}
+]{cs584notes}
+\newcommand{\learningtask}[3]{%
+	\begin{description}
+		\item[$T$]: #1
+		\item[$P$]: #2
+		\item[$E$]: #3
+	\end{description}
+	\vspace*{0.25em}
+}
+
+% Document
+\begin{document}
+
+%\maketitle
+
+\tableofcontents
+
+\section{Linear Separator}\label{sec:linear-separator}
+Assuming that \textcolor{red}{red} and \textcolor{blue}{blue} datasets represents points \data{$X_{1}$} and \data{$X_{2}$}, then the two sets \data{$X_{1}$} and \data{$X_{2}$} are \emph{linearly separable} if there exists $(n+1)$ real numbers \data{$w_{1}, w_{2}, \dots, w_{n}, k$}
+\begin{itemize}
+	\item such that every point in \data{$X_{1}$} \emph{satisfies} $ \sum_{i=1}^{n} w_{i}x_{i} < k $
+	\item such that every point in \data{$X_{2}$} \emph{satisfies} $ \sum_{i=1}^{n} w_{i}x_{i} > k $
+\end{itemize}
+
+Binary \emph{classification} \data{$y_{i} \in \{-1, 1\}$} can be viewed as the task of \emph{separating classes} in feature space.
+\begin{itemize}
+	\item Hypothesis class of linear \emph{decision surfaces} is \data{$f(x_{i}) = \sign(\vec{w}^{T}\vec{x_{i}} + b)$.}
+	\item Without loss of generality, we assume that $b=0$. Thus, we get the simplified \data{$f(x_{i}) = \sign(\vec{w}^{T}\vec{x_{i}})$.}
+	\item \data{$(y_{i})(\vec{w}^{T}\vec{x}_{i}) > 0$} $\Leftrightarrow$ data point \data{$x_{i}$} is correctly \emph{classified.}
+	\begin{itemize}
+		\item Remember, \data{$y_{i}$} is counting as \data{1} or \data{-1}.
+	\end{itemize}
+\end{itemize}
+
+\section{Perceptron Algorithm}\label{sec:perceptron-algorithm}
+\begin{itemize}
+	\item Set time \data{$t=1$}, start with vector \data{$\vec{w}_{1}=\oldvec{0}$}.
+	\item Given example $\vec{x}$, \emph{predict positive} iff (if and only if) \data{$\vec{w_{1}\cdot\vec{x} \geq 0}$}.
+	\item On a mistake, update as follows:
+	\begin{itemize}
+		\item Mistake on \emph{positive}, then update \data{$\vec{w}_{t+1} \gets \vec{w}_{t} + \vec{x}$}.
+		\item Mistake on \emph{negative}, then update \data{$\vec{w}_{t+1} \gets \vec{w}_{t} - \vec{x}$}.
+	\end{itemize}
+\end{itemize}
+
+\section{Geometric Margin}\label{sec:geometric-margin}
+The \emph{margin} of example $\data{}$ $\dots$
+
+The \emph{margin} \data{$\gamma$} of a set of examples $\data{S}$ w.r.t (with respect to)  a \emph{linear separator} \data{$\vec{w}$} is the largest margin over points \data{$\vec{x}\in S$}.
+Theorem: If the data has a \emph{margin} \data{$\gamma$} and all points lie inside a ball of \emph{radius} \data{$R$}, then the Perceptron algorithm makes \data{$\leq \frac{R}{\gamma^{2}}$} \emph{mistakes.}
+
+\section{Support Vector Machine}\label{sec:svm}
+\emph{Support vector machines} (SVMs) are \emph{supervised max-margin} models with associated learning algorithms.
+\begin{itemize}
+	\item Good \emph{generalization} in theory.
+	\item Good \emph{generalization} in practice.
+	\item Work well with \emph{few training instances}.
+	\item Find \emph{globally best} model.
+	\item \emph{Efficient algorithms}.
+	\item Amenable to the \emph{kernel trick}.
+\end{itemize}
+
+\section{Optimal Linear Separator}\label{sec:optimal-linear-separator}
+Which of the \emph{linear separators} is optimal?
+% TODO: Insert figure of linear separators from notes
+
+\section{Classification Margin}\label{sec:classification-margin}
+Examples closest to the hyperplane are \emph{support vectors}.
+Margin \data{$\rho$} of the separator is the \emph{distance between support vectors}.
+
+\section{Maximizing the Margin}\label{sec:maximizing-the-margin}
+\begin{itemize}
+	\item Better \emph{Generalization} -- A larger margin allows the SVM to \emph{better generalize} to new, unseen data, leading to \emph{higher predictive accuracy}.
+	\item Improved \emph{Robustness} -- A larger margin can lead to improved robustness \emph{against noise and outliers} in the training data, as it allows for \emph{greater tolerance} of misclassified examples.
+	\item Reducing \emph{Overfitting} -- A larger$\dots$
+\end{itemize}
+
+\section{Linear SVM}\label{sec:linear-svm}
+Let training set \data{$\left\{ (\vec{x}_{i}, y_{i})_{i=1\dots{}n}\ , \vec{x}_{i}\in\mathbb{R}^{d}, y_{i} \in \{ -1, 1\} \right\}$} be separated by a hyperplane with margin \data{$\rho$}.
+Then for each training example \data{$(\vec{x}_{i}, y_{i})$}
+
+\begin{equation*}
+\begin{aligned}
+	\vec{w}^{T}\vec{x}_{i} + b \geq 1 && \mbox{ if } y_{i} = 1 &&\\
+	&&&& \Leftrightarrow y_{i}\left( \vec{w}^{T}\vec{x}_{i} + b \right) \geq 1\\
+	\vec{w}^{T}\vec{x}_{i} + b \leq -1 && \mbox{ if } y_{i} = -1 &&\\
+\end{aligned}
+\end{equation*}
+
+Geometrically, the \emph{distance} between the \emph{2 hyperplanes} can be expressed as:
+\begin{equation}
+	\rho = \frac{2}{||w||}
+	\label{eq:hyperplane-distance}
+\end{equation}
+
+Then we can formulate the \emph{quadratic optimization problem}:
+
+\begin{svmbox}
+	Find \data{$\vec{w}$} and \data{$b$} such that \data{\[ \rho = \frac{2}{||\vec{w}||} \]} is \emph{maximized} \emph{and} for all \data{$\left( \vec{x}_{i}, y_{i} \right), i=1\dots{}n : y_{i}\left( \vec{w}^{T}\vec{x}_{i} + b \right) \geq 1$}
+\end{svmbox}
+
+Which can be reformulated as:
+
+\begin{svmbox}
+	\data{$\vec{x}_{i}, y_{i}$}, find \data{$\vec{w}$} and \data{$b$} such that
+	\data{\[ \mbox{\emph{Minimize }} Q(w) = \frac{1}{2}||\vec{w}||^{2} = \frac{1}{2}\vec{w}^{T}\vec{w} \]}
+	subject to \data{$~$} $\dots$ % TODO: Add green box around the content
+\end{svmbox}
+
+\section{Lagrangian Duality}\label{sec:lagrangian-duality}
+\begin{itemize}
+	\item Need to \emph{optimize} a \emph{quadratic function} subject to \emph{linear constraints}.
+	\item Quadratic optimization problems are a well-known class of mathematical programming problems for which several (non-trivial) algorithms exist.
+	\item Solution involves \emph{constructing dual problem} where \emph{Lagrange multipliers} \data{${a_{i}}$} is associated with all inequality constraint in primal (original) problem:
+\end{itemize}
+
+\begin{svmbox}
+	$\forall i$, find \data{$a_{1},\dots,a_{n}$} such that ... subject to \data{$a_{i} \geq 0$}
+\end{svmbox}
+
+\end{document}

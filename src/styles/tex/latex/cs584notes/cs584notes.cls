@@ -15,3 +15,16 @@
 \renewcommand{\emph}[1]{\textcolor{emphblue}{#1}}
 \newcommand{\definition}[2]{\textcolor{emphblue}{#1}: #2}
 \newcommand{\data}[1]{\textcolor{red}{#1}}
+
+\newcommand{\sign}{\mbox{sign}}
+\let\oldvec\vec
+\renewcommand{\vec}[1]{%
+	\mathbf{#1}%
+}
+
+\newenvironment{svmbox}
+{
+	\begin{center}
+}{
+	\end{center}
+}
