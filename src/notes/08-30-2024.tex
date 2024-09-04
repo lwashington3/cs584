@@ -1,0 +1,64 @@
+%! Author = Len Washington III
+%! Date = 8/30/24
+
+% Preamble
+\documentclass[
+	title={SVM}
+]{cs584notes}
+
+% Document
+\begin{document}
+
+%\maketitle
+
+\tableofcontents
+
+\section{SVM Solution}\label{sec:svm-solution}
+\begin{itemize}
+	\item Given a \emph{solution} \data{$a_{1}\dots a_{n}$} to the dual problem, solution to the primal is:
+	\begin{svmbox}
+		\data{\[ \vec{w} = \sum a_{i}y_{i}\vec{x}\ \ \ b = y_{k} - \sum a_{i}y_{i}\vec{x}_{i}^{T}\vec{x}_{k} \mbox{ for any } a_{k} > 0  \]}
+	\end{svmbox}
+	\item Each non-zero $a_{i}$ indicates that corresponding \data{$\vec{x}_{i}$} is a \emph{support vector}.
+	\item Then the \emph{classifying function is:}
+	\begin{svmbox}
+		\[ \data{ f(x) = \sum a_{i}y_{i}\vec{x}_{i}^{T}\vec{x} + b } \]
+	\end{svmbox}
+	\item Notice that it relies on the \emph{inner product} between the test point \data{$\vec{x}$} and the support vectors \data{$\vec{x}_{i}$}.
+	\item Solving the optimization problem involves \emph{computing the inner products} \data{$\vec{x}_{i}^{T}\vec{x}_{j}$} between all training points.
+\end{itemize}
+
+\section{Soft Margin Classification}\label{sec:soft-margin-classification}
+\begin{itemize}
+	\item What if the training set is \emph{not linearly separable?}
+	\item \emph{Slack variables} can be added to \emph{allow misclassification} of difficult or noisy examples; thus, the result margin is called \emph{soft}.
+\end{itemize}
+
+\section{Kernel Method}
+\begin{itemize}
+	\item If we \emph{map} the \emph{input vectors} into a very \emph{high-dimensional feature space}, the task of \emph{finding} the \emph{maximum-margin separator} can become \emph{computationally intractable}.
+	\item All of the \emph{computations} that we need to do to find the \emph{maximum-margin separator} (SVM optimization problem) can be expressed in terms of \emph{inner products} between \emph{pairs of data points} (in the high-dimensional feature space).
+	\item These \emph{inner products} are the only part of the computation that depends on the dimensionality of the high-dimensional space.
+	So, if we had a \emph{fast way} to do the dot products, we would \emph{not have ot pay a price}
+	\item The \emph{kernel trick} is just a way of \emph{doing inner products} a whole lot faster than is usually possible.
+	It relies on \emph{choosing a way of mapping} to the \emph{high-dimensional feature space} that allows fast scalar products.
+	\item By using a \emph{nonlinear vector function} \data{$\phi(x) = \left< \phi(x_{1}), \dots, \phi(x_{n}) \right>$}, the \data{$n$}-dimensional input vector \data{$\vec{x}$} can be mapped into high-dimensional feature space.
+	The \emph{decision function} in the feature space is expressed as:
+	\[ \data{ f(x) = \vec{w}^{T}\phi(\vec{x}) + b } \]
+	\item In terms of solving the \emph{quadratic optimization problem of SVM}, each training data point is in the form of dot products.
+	A \emph{kernel function} \data{$K$} simplifies the calculation of dot product terms
+	\[ \data{K(\vec{x_{1},)} \] % TODO: Finish me
+
+\end{itemize}
+
+\section{Kernel Trick}
+Example: Take this 2-dimensional vector: $\vec{x} = [x_{1}, x_{2}]$
+\begin{equation*}
+\begin{aligned}
+	K(\vec{x}_{i}, \vec{x}_{j}) &= (1 + \vec{x}_{i}^{T}\vec{x}_{j})^{2}\\
+		&= 1 + x_{i1}^{2}x_{j1}^{2} + 2x_{i1}x_{j1}x_{i2}x_{j2} + x_{i2}^{2}x_{j2}^{2} + 2x_{i1}x_{j1} + 2x_{i2}x_{j2}\\
+		&= \left[ 1\ x_{i1}^{2} \sqrt{2}x_{i1}  \right]
+\end{aligned}
+\end{equation*}
+
+\end{document}

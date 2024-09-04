@@ -1,0 +1,156 @@
+%! Author = Len Washington III
+%! Date = 9/04/24
+
+% Preamble
+\documentclass[
+	title={Na\:ive Bayes Learning}
+]{cs584notes}
+\usepackage{mdsymbol}
+
+% Document
+\begin{document}
+
+%\maketitle
+
+\tableofcontents
+
+\section{Direct Learning}\label{sec:direct-learning}
+\begin{itemize}
+	\item Consider a \emph{distribution} \data{$D$}
+	\item \data{$X$} - \emph{Instance} space, \data{$Y$} - Set of \emph{labels}. (e.g. \data{$\pm1$})
+	\item Given a \emph{sample} \data{$\{ (x,y) \}_{1}^{n}$} and a \emph{loss function} \data{$L(x,y)$}, find a \emph{hypothesis}
+\end{itemize}
+
+\section{Probabilistic Model}\label{sec:probabilistic-model}
+Paradigm:
+\begin{itemize}
+	\item \emph{Learn} a \emph{probability distribution} of the \emph{dataset}.
+	\item Use it to \emph{estimate} which outcome is more likely.
+\end{itemize}
+
+Instead of learning \data{$h: X\rightarrow Y$}, \emph{learn} \data{$P(Y|X)$}.
+
+\begin{itemize}
+	\item Estimate probability from data
+	\begin{itemize}
+		\item Maximum Likelihood Estimate (MLE)
+		\item Maximum Aposteriori Estimation (MAP)
+	\end{itemize}
+\end{itemize}
+
+\section{Probability Recap}\label{sec:probability-recap}
+\[ 0 \leq P(A) \leq 1 \]
+\[ P(true) = 1, P(false) = 0 \]
+\[ P(A \lor B) = P(A) + P(B) + P(A \land B) \]
+\[ P(A|B) = \frac{P(A\land B)}{{P(B)}} \]
+
+\section{Joint Distribution}\label{sec:joint-distribution}
+Making a \emph{joint distribution} of \data{$d$} \emph{variables}
+\begin{itemize}
+	\item Make a \emph{truth table} listing all combinations of values of your variables (if there are \data{$d$} \emph{boolean variables} then the table will have \data{$2^{d}$ rows})
+	\item For \emph{each combination} of values, say how \emph{probable} it is.
+	\item The \emph{probability} must \emph{sum} up to \data{$1$}.
+\end{itemize}
+
+Once we have the Joint Distribution, we find probability of any logical expression involving these variables.
+
+\[ \data{P(E) = \sum_{rows\ matching\ E}P(row)} \]
+
+\section{Independence}\label{sec:independence}
+When two \emph{events} do \emph{not affect} each other's \emph{probabilities}, they are called \emph{independent events}
+
+\[ \data{ A \upvDash B \leftrightarrow P(A\land B) = P(A)\times P(B) } \]
+
+The \emph{conditional independence} of events \data{$A$} and \data{$B$}, given \data{$C$} is:
+\[ \data{ A \upvDash B | c \leftrightarrow P(A|B,C) = \frac{P(A\land B|C)}{P(B|C)} = \frac{P(A|C)\times P(B|C)}{P(B|C)} = P(A|C) } \]
+
+\section{Bayes' Rule}\label{sec:bayes'-rule}
+\begin{equation}
+	\data{P(A|B) = \frac{P(B|A)\times P(A)}{P(B)}}
+	\label{eq:bayes-rule}
+\end{equation}
+where \data{$A$} and \data{$B$} are \emph{events} and \data{$P(B)\neq0$}.
+Applying \emph{Bayes' rule} for \emph{machine learning} --
+
+\begin{equation}
+	\data{P(hypothesis\ |\ evidence) = \frac{P(evidence\ |\ hypothesis)\times P(hypothesis)}{P(evidence)}}
+	\label{eq:bayes-rule-ml}
+\end{equation}
+
+\section{Bayesian Learning}\label{sec:bayesian-learning}
+\begin{itemize}
+	\item Goal: find the \emph{best hypothesis} from some space \data{$H$} of \emph{hypotheses}, given the observed data (\emph{evidence}) \data{$D$}.
+	\item Define the \emph{most probable hypothesis} in \data{$H$} to be the \emph{best}.
+	\item In order to do that, we need to \emph{assume} a \emph{probability distribution} over the \emph{class} \data{$H$}.
+	\item In addition, we need to know something about the \emph{relation} $\dots$
+\end{itemize}
+
+\begin{description}[font=\color{red}]
+	\item[$P(h)$] -- \emph{Prior Probability} of the \emph{hypothesis} \data{$h$}. Reflects the background knowledge, before data is observed.
+	\item[$P(D)$] -- \emph{Probability} that this sample of the \emph{data} is \emph{observed}.
+	\item[$P(D|h)$] -- {Probability} of \emph{observing} the \emph{sample} \data{$D$}, given that \emph{hypothesis} $h$ is the \emph{target}, also referred to as \emph{likelihood}.
+	\item[$P(h|D)$] -- \emph{Posterior probability} of \data{$h$}. The \emph{probability} that \data{$h$} is the \emph{target}, given that \data{$D$} has been \emph{observed}.
+\end{description}
+
+\begin{itemize}
+	\item \data{$P(h|D)$} \emph{increases} with \data{$P(h)$} and \data{$P(D|h)$}.
+	\item \data{$P(h|D)$} \emph{decreases} with \data{$P(D)$}.
+\end{itemize}
+
+\section{Maximum APosteriori Estimate}\label{sec:maximum-aposteriori-estimate}
+\[ \data{ P(h|D) = \frac{P(D|h)\times P(h)}{P(D)} } \]
+\begin{itemize}
+	\item The \emph{learner} considers a \emph{set of candidate hypotheses} \data{$H$} (models) and attempts to find the \emph{most probable} one \data{$h\in H$}, given the observed data.
+	\item Such maximally probable hypothesis is called \emph{maximum a posterior estimate} (MAP). Bayes theorem is used to compute it:
+	\data{\begin{equation*}
+	\begin{aligned}
+		h_{MAP} &= \arg\max_{h\in H}P(h|D)\\
+				&= \arg\max_{h\in H}\frac{P(D|h)\times P(h)}{P(D)}\\
+				&= \arg\max_{h\in H}P(D|h)\times P(h)\\%}
+	\end{aligned}
+	\end{equation*}}
+\end{itemize}
+
+\section{Maximum Likelihood Estimate}\label{sec:maximum-likelihood-estimate}
+\begin{itemize}
+	\item We may assume that \emph{a priori}, \emph{hypotheses} are \emph{equally probable.}
+	\[ P(h_{i}) = P(h_{j}) \forall h_{i}, h_{j} \in H \]
+	\item With that assumption, we can treat \data{$\frac{P(h)}{P(D)}$} as a constant. We get the \emph{maximum likelihood estimate} (MLE):
+	\data{\begin{equation*}
+	\begin{aligned}
+		h_{MLE} &= \arg\max_{h\in H} \frac{P(D|h)\times P(h)}{P(D)}\\
+				&= \arg\max_{h\in H} P(D|h)\times P(h)
+	\end{aligned}
+	\end{equation*}}
+	\item Here we just \emph{look for} the \emph{hypothesis} that \emph{best explains} the \emph{data}.
+\end{itemize}
+
+\section{Bayesian Classifier}\label{sec:bayesian-classifier}
+\begin{itemize}
+	\item \data{$f: \vec{X}\rightarrow Y$} where, instances \data{$x\in X$} is a collection of inputs --
+	\[ \data{ \vec{x} = (x_{1}, x_{2}, \dots, x_{n}) } \]
+	\item Given an example, \emph{assign} it the \emph{most probable} value in \data{$Y$}.
+	\begin{equation*}
+	\begin{aligned}
+		y_{MAP} &= \arg\max_{y_{j}\in Y} P(y_{j} | x)\\
+				&= \arg\max_{y_{j}\in Y} P(y_{j} | x) \dots
+	\end{aligned}
+	\end{equation*}
+	\item Given the training data, we have to \emph{estimate} the two terms.
+	\item Estimating \data{$P(y)$} is easy, e.g., under the \emph{binomial distribution assumption}, \emph{count} the number of \emph{times} \data{$y$} appears in the training data.
+	\item However, it is \emph{not feasible} to estimate \data{$P(x_{1}, x_{2}, \dots, x_{n} | y)$}
+	\item In this case, we have to \emph{estimate}
+\end{itemize}
+
+\section{Na\:ive Bayes Classifier}\label{sec:naive-bayes-classifier}
+\emph{Assumption}: Input feature values are independent, given the target value.
+\begin{equation*}
+\begin{aligned}
+	P(x_{1}, x_{2}, \dots, x_{n} | y_{j}) &= P(x_{1} | x_{2}, \dots, x_{n}, x_{j}) \times P(x_{2}, \dots, x_{n} | y)\\
+										  &= P(x_{1} | x_{2}, \dots, x_{n}, x_{j}) \times P(x_{2}, \dots, x_{n} | y)\\
+	&=\vdots\\
+	&= \data{ \Pi_{i=1}^{n} P(x_{i} | y_{j}) }
+\end{aligned}
+\end{equation*}
+
+\end{document}
