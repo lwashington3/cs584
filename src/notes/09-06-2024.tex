@@ -1,0 +1,88 @@
+%! Author = Len Washington III
+%! Date = 9/6/24
+
+% Preamble
+\documentclass[
+	title={Naïve Bayes Learning}
+]{cs584notes}
+
+% Document
+\begin{document}
+
+%\maketitle
+
+\tableofcontents
+
+\section{Gaussian Naïve Bayes}\label{sec:gaussian-naive-bayes}
+Compute the \emph{mean} and \emph{standard deviation} to estimate the \emph{likelihood}.
+
+\begin{equation*}
+\begin{aligned}
+	\mu_{1} &= E[X_{1}\ |\ Y = 1] = \frac{2 + (-1.2)  + 2.2}{3} = 1\\
+	\sigma_{1}^{2} &= E\left[ (X_{1} - \mu_{1})^{2} | Y = 1 \right] = \frac{(2-1)^{2} + (-1.2 - 1)^{2} + (2.2 - 1)^{2}}{3} = 2.43\\
+	P(x_{1} | Y=1 ) &= \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(x_{1} - \mu_{1})^{2}}{2\sigma^{2}}} = \frac{1}{3.91}e^{-\frac{(x_{1} - 1)^{2}}{4.86}}
+\end{aligned}
+\end{equation*}
+
+\section{Bayesian Belief Network}\label{sec:bayesian-belief-network}
+\begin{itemize}
+	\item Naïve Bayes classifier works with the \emph{assumption} that the values of the \emph{input features} are \emph{conditionally independent} given the \emph{target value}.
+	\item This \emph{assumption} dramatically \emph{reduces} the \emph{complexity} of \emph{learning} the \emph{target function}.
+	\item \emph{Bayesian Belief Network} describes the probability distribution governing a set of variables by specifying a \emph{set of conditional independence assumptions} along with a set of conditional probabilities. \emph{Conditional independence} assumptions here apply to \emph{subsets} of the \emph{variables}.
+	\[ \data{ P(x_{1}, x_{2}, \dots, x_{l}\ |\ x_{1}{'}, x_{2}{`}, \dots, x_{m}{`}, y_{1}, y_{2}, \dots, y_{n}) = P(x_{1}, x_{2}, \dots, x_{l} | y_{1}, y_{2}, \dots, y_{n}) } \]
+\end{itemize}
+
+\section{Training Bayesian Classifier}\label{sec:training-bayesian-classifier}
+During \emph{training}, typically \emph{log-space} is used.
+
+\data{\begin{equation*}
+\begin{aligned}
+	y_{NB} &= \arg\max_{y} \left[ \log P(y) \Pi_{i=1}^{n} P(x_{i} | y) \right]\\
+		   &= \arg\max_{y} \left[ \log P(y) + \sum_{i=1}^{n} \log P(x_{i} | y) \right]\\
+\end{aligned}
+\end{equation*}}
+
+\section{Text Classification}\label{sec:text-classification}
+\begin{algorithm}[H]
+	\caption{Text-based Naïve Bayes Classification}\label{alg:train-naive-bayes}
+	\begin{algorithmic}[1]
+	\Function{Train-Naive-Bayes}{$D, C$} \Returns $\log P(c)$ and $\log P(w|c)$
+		\ForAll{class $c\in C$}\Comment{Calculate $P(c)$ terms}
+			\State $N_{doc} \gets$ number of documents in $D$
+			\State $N_{c} \gets$ number of documents from $D$ in class $c$
+			\State $logprior[c] \gets \log\frac{N_{c}}{N_{doc}}$
+			\State $V \gets $ vocabulary of $D$
+			\State $bigdoc[c] \gets \Call{Append}{d}$ \textbf{for} $d\in D$ \textbf{with} class $c$
+			\ForAll{word $w$ in $V$}\Comment{Calculate $P(w|c)$ terms}
+				\State $\Call{Count}{w,c}\dots$
+			\EndFor
+		\EndFor
+	\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+The word \emph{with} doesn't occur in the training set, so we drop it completely (we don't use unknown word models for Naïve Bayes)
+
+\section{Evaluating Classifiers}\label{sec:evaluating-classifiers}
+\begin{itemize}
+	\item \emph{Gold Label} is the \emph{correct} output \emph{class} label of an input.
+	\item \emph{Confusion Matrix} is a table for \emph{visualizing} how a \emph{classifier performs} with respect to the fold labels, using two dimensions (system output and gold labels), and each cell labeling a set of possible outcomes.
+	\item \emph{True Positives} and \emph{True Negatives} are \emph{correctly classified} outputs belonging to the positive and negative class, respectively.
+\end{itemize}
+
+\section{Precision, Recall, F-Measure}\label{sec:precision-recall-f-measure}
+\begin{equation}
+	\mathbf{Precision} = \frac{\mbox{true positives}}{\mbox{true positives } + \mbox{ false positives}}
+	\label{eq:precision}
+\end{equation}
+
+\section{ROC Curve}\label{sec:roc-curve}
+\begin{itemize}
+	\item A receiver operating characteristic curve (ROC curve) is a graphical plot that illustrates the \emph{performance} of a \emph{binary classifier model}.
+	\item The \emph{ROC curve} is the plot of the \emph{true positive rate (recall)} (TPR) against the \emph{false positive rate} (FPR).
+	\item \emph{ROC curve} plots \emph{TPR vs. FPR} at different \emph{classification thresholds}.
+	\item \emph{Classification threshold} is used to convert the \emph{output} of a \emph{probabilistic classifier} into class \emph{labels}.
+	\item The \emph{threshold} determines the
+\end{itemize}
+
+\end{document}

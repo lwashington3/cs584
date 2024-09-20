@@ -1,0 +1,181 @@
+%! Author = Len Washington III
+%! Date = 9/11/24
+
+% Preamble
+\documentclass[
+	title={Logistic Regression}
+]{cs584notes}
+
+% Document
+\begin{document}
+
+%\maketitle
+
+\tableofcontents
+
+\section{\naive Bayes: Two Classes}\label{sec:naive-bayes:-two-classes}
+\begin{itemize}
+	\item \naive Bayes classifier gives a method for \emph{predicting} the \emph{most likely class} rather than an explicit class.
+	\item In the case of two classes, \data{$y\in\{0, 1\}$} we predict that \data{$y=1$} iff
+	\[ \dots \]
+\end{itemize}
+
+Take logarithm;
+
+\[ \log \frac{P(y_{j}=1)}{P(y_{j}=0)} + \sum_{i}\log \frac{1-p_{i}}{1-q_{i}} + \sum_{i}\left( \log\frac{p_{i}}{1-p_{i}} - \log\frac{q_{i}}{1-q_{i}} \right)x_{i} > 0 \]
+\begin{itemize}
+	\item We get that \naive bayes is a \emph{linear separator} with --
+	\[ w_{i} = \log\frac{p_{i}}{1 - p_{i}} - \log\frac{q_{i}}{1 - q_{i}} = \log\frac{p_{i}(1-q_{i})}{q_{i}(1-p_{i})} \]
+	\item In the case of two classes, we can say:
+	\item but since \data{$P(y_{j} = 1|x) = 1 - P(y_{j} = 0 | x)$}, we get:
+	\[ P(y_{j}=1|x) = \frac{1}{1+e^{-\left( \sum_{i}w_{i}x_{i} + b \right)}} \]
+	\item This is logistic regression
+\end{itemize}
+
+\section{Generative Classifiers}\label{sec:generative-classifiers}
+If we are \emph{distinguishing} cat from dog images using a \emph{Generative Classifier}, we \emph{build} a \emph{model} of what is in a \emph{cat image}.
+\begin{itemize}
+	\item Knows about whiskers, ears, eyes.
+	\item \emph{Assigns a probability to any image to determine how cat-like is that image?}
+\end{itemize}
+Similarly, \emph{build} a \emph{model} of what is in a \emph{dog image}.
+Now given a new image, run both models and see which one \emph{fits better}.
+
+\section{Discriminative Classifiers}\label{sec:discriminative-classifiers}
+If we are \emph{distinguishing} cat from dog images using a \emph{Discriminative Classifier}.
+\begin{itemize}
+	\item Just try to \emph{distinguish} dogs from cats.
+	\begin{itemize}
+		\item Oh look, dogs have collars.
+		\item Ignore everything else.
+	\end{itemize}
+\end{itemize}
+
+\section{Generative vs Discriminative Classifiers}\label{sec:generative-vs-discriminative-classifiers}
+Generative Classifiers (\emph{\naive Bayes}) --
+\begin{itemize}
+	\item Assume some functional form for \emph{conditional independence}.
+	\item Estimate parameters of \data{$P(D|h)$}, \data{$P(h)$} directly from training data.
+	\item Use Bayes rule to calculate \data{$P(h|D)$}.
+\end{itemize}
+
+Why not \emph{learn}
+
+\section{Learning a Logistic Regression Classifier}\label{sec:learning-a-logisitc-regression-classifier}
+Given \data{$n$} \emph{input-output} pairs --
+\begin{enumerate}
+	\item A feature representation of the \emph{input}.
+	For each \emph{input observation} \data{$x_{i}$}, a vector of \emph{features} \data{$[x_{1}, x_{2}, \dots, x_{d}]$}.
+	\item A \emph{classification function} that computes \data{$y$}, the estimated class, via \data{$P(y|x)$}, using the \emph{sigmoid of softmax} functions.
+	\item An objective function for learning, like \emph{cross-entropy loss}.
+	\item An algorithm for optimizing the objective function, like \emph{stochastic gradient ascent/descent}.
+\end{enumerate}
+
+\section{Logistic Regression}\label{sec:logistic-regression}
+Logistic Regression \emph{assumes} the following function form for \data{$P(y|x)$}:
+\data{\[ P(y=1|x) = \frac{1}{1+e^{-\left( \sum_{i}w_{i}x_{i} + b \right)}} \]}
+\begin{equation*}
+\begin{aligned}
+	P(y=1|x) &= \frac{1}{1+e^{-\left( \sum_{i}w_{i}x_{i} + b \right)}}\\
+			 &= \frac{e^{\left( \sum_{i}w_{i}x_{i} + b \right)}}{e^{\left( \sum_{i}w_{i}x_{i} + b \right)} + 1}\\
+	P(y=0|x) &= 1 - \frac{1}{1+e^{\left( \sum_{i}w_{i}x_{i} + b \right)}}\\
+			 &= \frac{1}{e^{\left( \sum_{i}w_{i}x_{i} + b \right)} + 1}\\
+	\frac{P(y=1|x)}{P(y=0|x)} &= e^{\left( \sum_{i}w_{i}x_{i} + b \right)} > 1\\
+	&\Rightarrow \sum_{i} w_{i}x_{i} + b > 0
+\end{aligned}
+\end{equation*}
+Logistic Regression is a \emph{linear} classifier.
+Turning a probability into a classifier using the \emph{logistic function}:
+\[ \data{ y_{LR}\left\{ \begin{array}{clr}
+	1 & \mbox{ if } P(y=1|x) \geq 0.5 & \textcolor{black}{\leftarrow w_{i}x_{i} + b \geq 0}\\
+	0 & \mbox{otherwise} & \textcolor{black}{\leftarrow w_{i}x_{i} + b < 0}
+\end{array} \right. } \]
+
+\section{LR Example}\label{sec:lr-example}
+
+\section{Sentiment Classification}\label{sec:sentiment-classification}
+Let's assume for the moment that we've already \emph{learned} a \emph{real-valued weight} for each of these features, and that the \emph{6 weights} corresponding to the \emph{6 features} are \data{$[2.5, -5.0, -1.2, 0.5, 2.0, 0.7]$}, while \data{$b=0.1$}.
+
+\section{Training Logistic Regression}\label{sec:training-logistic-regression}
+We'll focus on \emph{binary classification}.
+We \emph{parameterize} \data{$w_{i},b$} as \data{$\theta$}:
+\[ P(y_{i} = 0|x_{i},\theta) = \frac{1}{e^{\sum_{i} w_{i}x_{i} + b}+1}, P(y_{i} = 1|x_{i},\theta) = \frac{e^{\sum_{i} w_{i}x_{i} + b}}{e^{\sum_{i} w_{i}x_{i} + b}+1}, P(y_{i}|x_{i},\theta) = \frac{e^{y_{i}\sum_{i} w_{i}x_{i} + b}}{e^{\sum_{i} w_{i}x_{i} + b}+1} \]
+How do we \emph{learn parameters} \data{$\theta$}?
+
+\section{Cross-Entropy Loss}\label{sec:cross-entropy-loss}
+\begin{itemize}
+	\item We want to know \emph{how far} is the \emph{classifier output} \data{$\hat{y}$} from the \emph{true output} \data{$y$}.
+	Let's call this difference \data{$L(\hat{y},y)$}.
+	\item Since there are only \emph{2 discrete outcomes} (0 or 1), we can express the probability $P(y|x)$ from our classifiers as:
+	\data{\[ P(y|x) = \hat{y}^{y}\cdot (1-\hat{y})^{1-y} \]}
+	\item Goal: \emph{maximize the probability} of the correct label \data{$P(y|x)$.}
+	\item Maximize:
+	\data{\begin{equation*}
+	\begin{aligned}
+		P(y|x) &= \hat{y}^{y}\cdot (1-\hat{y})^{1-y}\\
+		\log(P(y|x)) &= \log\left( \hat{y}^{y}\cdot (1-\hat{y})^{1-y} \right)\\
+					 &= y\log(\hat{y})+ (1-y)\log(1-\hat{y})\\
+	\end{aligned}
+	\end{equation*}}
+	\item We want to \emph{minimize} the \emph{cross-entropy loss}:
+\end{itemize}
+
+\section{Minimizing Cross-Entropy Loss}\label{sec:minimizing-cross-entropy-loss}
+\data{\[ \min_{\theta} L_{CE}(\hat{y}, y) \]}
+\begin{itemize}
+	\item Minimizing loss function \data{$L_{CE}(\hat{y},y)$} is a \emph{convex optimization problem}.
+\end{itemize}
+
+\section{Optimizing a Convex/Concave Function}\label{sec:optimizing-a-convex/concave-function}
+\begin{itemize}
+	\item Maximum of a \emph{concave} function is \emph{equivalent} to the \emph{minimum} of a \emph{convex} function.
+	\item \emph{Gradient Ascent} is used for finding the \emph{maximum} of a \emph{concave} function.
+	\item \emph{Gradient Descent} is used for finding the \emph{minimum} of a \emph{convex} function.
+\end{itemize}
+
+\section{Gradients}\label{sec:gradients}
+\begin{itemize}
+	\item The \emph{gradient} of a \emph{function} is a \emph{vector pointing} in the \emph{direction} of the \emph{greatest increase} in a function.
+\end{itemize}
+\begin{description}
+	\item[\emph{Gradient Ascent}]
+	\item[\emph{Gradient Descent}]
+\end{description}
+
+\section{Gradient Descent for Logistic Regression}\label{sec:gradient-descent-for-logistic-regression}
+\begin{itemize}
+	\item Let us represent $\hat{y}=f(x, \theta)$
+	\item Gradient:
+	\begin{equation}
+		\nabla_{\theta} L(f(x,\theta), y) = \left[ \frac{\partial L(f(x, \theta), y)}{\partial b} , \frac{\partial L(f(x, \theta), y)}{\partial w_{1}}, \frac{\partial L(f(x, \theta), y)}{\partial w_{2}}, \dots, \frac{\partial L(f(x, \theta), y)}{\partial w_{d}} \right]
+		\label{eq:gradient}
+	\end{equation}
+	\item Update Rule:
+	\begin{equation}
+	\begin{aligned}
+		\Delta\theta &= \eta\cdot\nabla_{\theta}L(f(x,\theta), y)\\
+		\theta_{t+1} &= \theta_{t} - \eta\cdot\frac{\partial}{\partial (w,b)}L(f(x,\theta), y)
+	\end{aligned}
+	\label{eq:update-rule}
+	\end{equation}
+\end{itemize}
+Gradient descent algorithm will \emph{iterate} until \data{$\Delta\theta < \epsilon$}.
+
+\begin{equation*}
+\begin{aligned}
+	L_{CE}(f(x, \theta), y) &= \log\left( 1 + e^{\sum_{i} w_{i}x_{i} + b} \right) - y\left( \sum_{i}w_{i}x_{i} + b \right)\\
+	\theta_{t+1} &= \theta_{t} - \eta\cdot\frac{\partial}{\partial (w,b)}L(f(x,\theta), y)\\
+				 &= \theta_{t} - \eta\cdot x_{i}\left[ \frac{e^{\sum_{i} w_{i}x_{i} + b}}{1 + e^{\sum_{i} w_{i}x_{i} + b}} - y \right]\\
+				 &= \theta_{t} - \eta\cdot x_{i}\left[ \hat{P}(y = 1|x,\theta_{t}) - y \right]
+\end{aligned}
+\end{equation*}
+
+\section{Learning Rate}\label{sec:learning-rate}
+\begin{itemize}
+	\item \data{$\eta$} is a \emph{hyperparameter}.
+	\item \emph{Large} \data{$\eta$} $\Rightarrow$ Fast convergence but larger residual error.
+	Also, possible oscillations.
+	\item \emph{Small} \data{$\eta$} $\Rightarrow$ Slow convergence but small residual error.
+\end{itemize}
+
+\end{document}

@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="August 30, 2024 Notes" type="LATEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory">
+  <configuration default="false" name="August 30, 2024 Notes" type="LATEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory" folderName="August Notes">
     <texify>
       <compiler>PDFLATEX</compiler>
       <compiler-path />
