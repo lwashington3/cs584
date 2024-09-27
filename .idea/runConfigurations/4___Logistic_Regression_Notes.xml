@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="August 30, 2024 Notes" type="LATEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory" folderName="August Notes">
+  <configuration default="false" name="4 - Logistic Regression Notes" type="LATEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory" folderName="Notes">
     <texify>
       <compiler>PDFLATEX</compiler>
       <compiler-path />
@@ -9,7 +9,7 @@
       <compiler-arguments />
       <envs />
       <before-run-command />
-      <main-file>$PROJECT_DIR$/src/notes/08-30-2024.tex</main-file>
+      <main-file>$PROJECT_DIR$/src/notes/4_Logistic_Regression.tex</main-file>
       <output-path>$PROJECT_DIR$/out/notes</output-path>
       <auxil-path>$PROJECT_DIR$/auxil/notes</auxil-path>
       <compile-twice>true</compile-twice>

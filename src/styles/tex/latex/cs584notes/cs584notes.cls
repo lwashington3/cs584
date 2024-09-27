@@ -5,10 +5,25 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{cs584notes}[Len Washington III's Document Class]
 
+\RequirePackage{kvoptions}
+
+\SetupKeyvalOptions{
+	family=csnotes,
+	prefix=csnotes@
+}
+
+\DeclareStringOption{title}
+\DeclareStringOption{number}
+
+\ProcessKeyvalOptions*
+
 \LoadClass[12pt]{report}
 
-\RequirePackage{cs584}
+\RequirePackage[title={\csnotes@number\ - \csnotes@title}]{cs584}
 \RequirePackage{enumitem}
+
+\setcounter{chapter}{\csnotes@number}
+\addtocounter{chapter}{-1}
 
 \definecolor{emphblue}{HTML}{0629ff}
 
@@ -27,4 +42,19 @@
 	\begin{center}
 }{
 	\end{center}
+}
+
+\renewcommand{\maketitle}{%
+%	{\Huge\textbf{\cs@title}}
+	\chapter{\csnotes@title}\label{ch:\csnotes@number}
+}
+
+\let\begindoc\document
+\let\enddoc\enddocument
+\renewenvironment{document}{
+	\begindoc
+	\maketitle
+	\tableofcontents
+}{
+	\enddoc
 }

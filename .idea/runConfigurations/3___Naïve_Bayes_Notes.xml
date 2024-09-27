@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="September 11, 2024 Notes" type="LATEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory" folderName="September Notes">
+  <configuration default="false" name="3 - Naïve Bayes Notes" type="LATEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory" folderName="Notes">
     <texify>
       <compiler>PDFLATEX</compiler>
       <compiler-path />
@@ -9,10 +9,10 @@
       <compiler-arguments />
       <envs />
       <before-run-command />
-      <main-file>$PROJECT_DIR$/src/notes/09-11-2024.tex</main-file>
+      <main-file>$PROJECT_DIR$/src/notes/3_Naive_Bayes.tex</main-file>
       <output-path>$PROJECT_DIR$/out/notes</output-path>
       <auxil-path>$PROJECT_DIR$/auxil/notes</auxil-path>
-      <compile-twice>false</compile-twice>
+      <compile-twice>true</compile-twice>
       <output-format>PDF</output-format>
       <latex-distribution>MIKTEX</latex-distribution>
       <has-been-run>true</has-been-run>

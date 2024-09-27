@@ -1,0 +1,116 @@
+%! Author = Len Washington III
+%! Date = 9/27/24
+
+% Preamble
+\documentclass[
+	number={6},
+	title={Clustering}
+]{cs584notes}
+
+% Document
+\begin{document}
+
+\section{Clustering}\label{sec:clustering}
+\emph{Clustering} is an \emph{unsupervised learning} technique which automatically \emph{partitions unlabeled data} into groups of \emph{similar datapoints}.
+It is useful for:
+\begin{description}
+	\item[Segmentation] Segmenting a large set of cases into small subsets that can be treated similarly.
+	\begin{itemize}
+		\item e.g., image segmentation.
+	\end{itemize}
+	\item[Compression] Generate a more compact description of a dataset.
+	\begin{itemize}
+		\item e.g., handwritten digit recognition.
+	\end{itemize}
+	\item[Representation] Model an underlying process that generates the data as a mixture of different, localized processes.
+\end{description}
+
+\section{Clustering Applications}\label{sec:clustering-applications}
+\begin{itemize}
+	\item Cluster news articles or web pages or search results by topic.
+	\item Cluster protein sequences by function of genes according to expression profile.
+	\item Cluster users of social networks by interest.
+	\item Cluster galaxies or nearby stars.
+\end{itemize}
+
+\section{Clustering Algorithms}\label{sec:clustering-algorithms}
+\subsection{Flat clustering}\label{subsec:flat-clustering}
+No inter-cluster structure.
+\begin{itemize}
+	\item $k$-means algorithm.
+	\item Gaussian mixture models (GMM).
+	\item Spectral clustering.
+\end{itemize}
+
+\subsection{Hierarchical clustering}\label{subsec:hierarchical-clustering}
+Clusters for a hierarchy.
+\begin{itemize}
+	\item Bottom-up (agglomerative clustering).
+	\item Top-down (divisive clustering).
+\end{itemize}
+
+\subsection{Hard clustering}\label{subsec:hard-clustering}
+Items are assigned to a unique cluster.
+\begin{itemize}
+	\item $k$-means algorithm.
+	\item Spectral clustering.
+\end{itemize}
+
+\subsection{Soft (fuzzy) clustering}\label{subsec:soft-clustering}
+Cluster membership is a real-valued function, distributed across several clusters.
+\begin{itemize}
+	\item Soft $k$-means.
+	\item Gaussian mixture models.
+\end{itemize}
+
+\subsection{Centroid-based clustering}\label{subsec:centroid-based-clustering}
+This type of clustering algorithm forms around the \emph{centroids} of the data points.
+E.g., $k-means$, $k-modes$.
+
+\subsection{Distribution-based clustering}\label{subsec:distribution-based-clustering}
+Clustering algorithm is modeled using statistical \emph{distributions}.
+It assumes that the data points in a cluster are generated from a particular \emph{probability distribution}, and the algorithm aims to estimate the parameters of the distribution.
+E.g., GMM\@.
+
+\subsection{Density-based clustering}\label{subsec:density-based-clustering}
+This type of clustering algorithm groups together data points that are in \emph{high-density concentration} and separates points in \emph{low-concentration} regions.
+E.g., DBSCAN\@.
+
+\section{$k$-Means Clustering}\label{sec:k-means-clustering}
+\begin{itemize}
+	\item \emph{$k$-means algorithm} is an \emph{iterative clustering} algorithm, based on the Euclidean distance.
+	It is a \emph{non-parametric} learning algorithm.
+	\item A \emph{greedy algorithm} (Lloyd's algorithm) locally optimizes the \emph{cluster quality} measure:
+	\begin{itemize}
+		\item The \emph{cluster quality} measure is computed based on the \emph{cluster centroid}.
+		\item Find the \emph{closest cluster center} for each item and assign it to that cluster.
+		\item \emph{Recompute} the \emph{cluster centroid} as the mean of items, for the newly-assigned items in the cluster.
+	\end{itemize}
+\end{itemize}
+
+% TODO: Insert figure
+
+\begin{itemize}
+	\item \emph{Initialize}: Pick \data{$k$} points as cluster \emph{centers}.
+	\item \emph{Repeat}:
+	\begin{itemize}
+		\item \emph{Assign} data points to \emph{closest cluster center}.
+		\item \emph{Change} the \emph{cluster center} to the \emph{average} of its assigned points.
+	\end{itemize}
+	\item \emph{Stop} when the \emph{assignments} of data points do \emph{not change}.
+	\item \emph{Input}: A set of \data{$n$} \emph{datapoints} \data{$x_{1}, x_{2}, \dots, x_{n} \in \mathbb{R}^{d}$} with \data{$k$} \emph{clusters}.
+	\item \emph{Output}: \data{$k$} representatives \data{$c_{1}, c_{2}, \dots, c_{k} \in \mathbb{R}^{d}$}.
+	\item \emph{Objective}: choose \data{$c_{1}, c_{2}, \dots, c_{k} \in \mathbb{R}^{d}$} such that:
+	\data{\begin{equation}
+		\min\sum_{i=1}^{n}\sum_{j=1}^{k} || x_{i} - c_{j} ||^{2}
+		\label{eq:k-means}
+	\end{equation}}
+	\item \emph{Initialize} cluster centers \data{$c_{1}, c_{2}, \dots, c_{k}$} and clusters \data{$C_{1}, C_{2}, \dots, C_{k}$}.
+	\item \emph{Repeat} until there is no further change:
+	\begin{itemize}
+		\item For each \data{$j: C_{j} \gets \{ x \mbox{ \textcolor{black}{whose \emph{closest center} is }} c_{j} \}$}.
+		\item For each \data{$j: c_{j} \gets \mbox{ \emph{mean} of } C_{j}$}.
+	\end{itemize}
+\end{itemize}
+
+\end{document}

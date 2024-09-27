@@ -3,34 +3,12 @@
 
 % Preamble
 \documentclass[
+	number={4},
 	title={Logistic Regression}
 ]{cs584notes}
 
 % Document
 \begin{document}
-
-%\maketitle
-
-\tableofcontents
-
-\section{\naive Bayes: Two Classes}\label{sec:naive-bayes:-two-classes}
-\begin{itemize}
-	\item \naive Bayes classifier gives a method for \emph{predicting} the \emph{most likely class} rather than an explicit class.
-	\item In the case of two classes, \data{$y\in\{0, 1\}$} we predict that \data{$y=1$} iff
-	\[ \dots \]
-\end{itemize}
-
-Take logarithm;
-
-\[ \log \frac{P(y_{j}=1)}{P(y_{j}=0)} + \sum_{i}\log \frac{1-p_{i}}{1-q_{i}} + \sum_{i}\left( \log\frac{p_{i}}{1-p_{i}} - \log\frac{q_{i}}{1-q_{i}} \right)x_{i} > 0 \]
-\begin{itemize}
-	\item We get that \naive bayes is a \emph{linear separator} with --
-	\[ w_{i} = \log\frac{p_{i}}{1 - p_{i}} - \log\frac{q_{i}}{1 - q_{i}} = \log\frac{p_{i}(1-q_{i})}{q_{i}(1-p_{i})} \]
-	\item In the case of two classes, we can say:
-	\item but since \data{$P(y_{j} = 1|x) = 1 - P(y_{j} = 0 | x)$}, we get:
-	\[ P(y_{j}=1|x) = \frac{1}{1+e^{-\left( \sum_{i}w_{i}x_{i} + b \right)}} \]
-	\item This is logistic regression
-\end{itemize}
 
 \section{Generative Classifiers}\label{sec:generative-classifiers}
 If we are \emph{distinguishing} cat from dog images using a \emph{Generative Classifier}, we \emph{build} a \emph{model} of what is in a \emph{cat image}.
