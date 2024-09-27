@@ -21,6 +21,7 @@
 
 \RequirePackage[title={\csnotes@number\ - \csnotes@title}]{cs584}
 \RequirePackage{enumitem}
+\RequirePackage[most]{tcolorbox}
 
 \setcounter{chapter}{\csnotes@number}
 \addtocounter{chapter}{-1}
@@ -37,11 +38,14 @@
 	\mathbf{#1}%
 }
 
+\setlength{\parindent}{0in}
+
+\definecolor{svmgreen}{HTML}{008000}
 \newenvironment{svmbox}
 {
-	\begin{center}
+	\begin{tcolorbox}[colback=white,colframe=svmgreen]
 }{
-	\end{center}
+	\end{tcolorbox}
 }
 
 \renewcommand{\maketitle}{%
