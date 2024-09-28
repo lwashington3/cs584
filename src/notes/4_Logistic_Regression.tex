@@ -14,7 +14,7 @@
 If we are \emph{distinguishing} cat from dog images using a \emph{Generative Classifier}, we \emph{build} a \emph{model} of what is in a \emph{cat image}.
 \begin{itemize}
 	\item Knows about whiskers, ears, eyes.
-	\item \emph{Assigns a probability to any image to determine how cat-like is that image?}
+	\item \emph{Assigns a probability} to any image to determine how cat-like is that image?
 \end{itemize}
 Similarly, \emph{build} a \emph{model} of what is in a \emph{dog image}.
 Now given a new image, run both models and see which one \emph{fits better}.
@@ -30,14 +30,26 @@ If we are \emph{distinguishing} cat from dog images using a \emph{Discriminative
 \end{itemize}
 
 \section{Generative vs Discriminative Classifiers}\label{sec:generative-vs-discriminative-classifiers}
-Generative Classifiers (\emph{\naive Bayes}) --
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{figures/4/classifiers}
+	\caption{Differences between Generative and Discriminative classifiers.}
+	\label{fig:classifiers}
+\end{figure}
+
+Generative Classifiers (\hyperref[eq:mle]{\emph{\Naive Bayes}}) --
 \begin{itemize}
 	\item Assume some functional form for \emph{conditional independence}.
 	\item Estimate parameters of \data{$P(D|h)$}, \data{$P(h)$} directly from training data.
-	\item Use Bayes rule to calculate \data{$P(h|D)$}.
+	\item Use Bayes' rule to calculate \data{$P(h|D)$}.
 \end{itemize}
 
-Why not \emph{learn}
+Why not \emph{learn} \data{$P(h | D)$} or the decision boundary \emph{directly}?
+Discriminative Classifiers (\hyperref[eq:map]{\emph{Logistic Regression}}) --
+\begin{itemize}
+	\item Assume some functional form for \data{$P(h | D)$} or for the decision boundary.
+	\item \emph{Estimate parameters} of \data{$P(h | D)$} \emph{directly} from training data.
+\end{itemize}
 
 \section{Learning a Logistic Regression Classifier}\label{sec:learning-a-logisitc-regression-classifier}
 Given \data{$n$} \emph{input-output} pairs --
@@ -53,7 +65,7 @@ Given \data{$n$} \emph{input-output} pairs --
 Logistic Regression \emph{assumes} the following function form for \data{$P(y|x)$}:
 \data{\[ P(y=1|x) = \frac{1}{1+e^{-\left( \sum_{i}w_{i}x_{i} + b \right)}} \]}
 \begin{equation*}
-\begin{aligned}
+\begin{aligned}[eqpurple]
 	P(y=1|x) &= \frac{1}{1+e^{-\left( \sum_{i}w_{i}x_{i} + b \right)}}\\
 			 &= \frac{e^{\left( \sum_{i}w_{i}x_{i} + b \right)}}{e^{\left( \sum_{i}w_{i}x_{i} + b \right)} + 1}\\
 	P(y=0|x) &= 1 - \frac{1}{1+e^{\left( \sum_{i}w_{i}x_{i} + b \right)}}\\
@@ -70,21 +82,65 @@ Turning a probability into a classifier using the \emph{logistic function}:
 \end{array} \right. } \]
 
 \section{LR Example}\label{sec:lr-example}
+Suppose we are doing \emph{binary sentiment classification} on movie review text, and we would like to know whether to assign the sentiment class \emph{position = 1} or \emph{negative = 0} to the following review:\\
+
+It's hokey.
+There are virtually no surprises, and the writing is second-rate.
+So why was is so enjoyable?
+For one thing, the case is great.
+Another nice touch is the music.
+I was overcome with the urge to get off the couch and start dancing.
+It sucked me in, and it'll do the same to you.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{figures/4/lr_example}
+	\caption{LR Example.}
+	\label{fig:lr_example}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{figures/4/lr_feature_vector}
+	\caption{Feature vector for the LR Example.}
+	\label{fig:lr_feature_vector}
+\end{figure}
+
 
 \section{Sentiment Classification}\label{sec:sentiment-classification}
 Let's assume for the moment that we've already \emph{learned} a \emph{real-valued weight} for each of these features, and that the \emph{6 weights} corresponding to the \emph{6 features} are \data{$[2.5, -5.0, -1.2, 0.5, 2.0, 0.7]$}, while \data{$b=0.1$}.
 
+\begin{equation*}
+\begin{aligned}[eqpurple]
+	P(+ve | x) &= P(y = 1 | x)\\
+	&= \frac{1}{1 + e^{\left( \sum_{i} w_{i}x_{i} + b \right)}}\\
+	&= \frac{1}{1 + e^{-\left( 2.5(3) + (-5)(2) + (-1.2)(1) + 0.5(3) + 2.0(0) + 0.7(4.19) + 0.1 \right)}}\\
+	&= 0.30\\
+	P(-ve | x) &= P(y = 0 | x)\\
+	&= 1 - P(y = 1 | x)\\
+	&= 1 - 0.70\\
+	&= 0.30
+\end{aligned}
+\end{equation*}
+Since \data{$P(+ve|x) > P(-ve|x)$}, the output sentiment class is \emph{positive}.
+
 \section{Training Logistic Regression}\label{sec:training-logistic-regression}
 We'll focus on \emph{binary classification}.
-We \emph{parameterize} \data{$w_{i},b$} as \data{$\theta$}:
-\[ P(y_{i} = 0|x_{i},\theta) = \frac{1}{e^{\sum_{i} w_{i}x_{i} + b}+1}, P(y_{i} = 1|x_{i},\theta) = \frac{e^{\sum_{i} w_{i}x_{i} + b}}{e^{\sum_{i} w_{i}x_{i} + b}+1}, P(y_{i}|x_{i},\theta) = \frac{e^{y_{i}\sum_{i} w_{i}x_{i} + b}}{e^{\sum_{i} w_{i}x_{i} + b}+1} \]
+We \emph{parameterize} \data{$(w_{i}, b)$} as \data{$\theta$}:
+\begin{equation*}
+\begin{aligned}[eqpurple]
+	P(y_{i} = 0|x_{i},\theta) = \frac{1}{e^{\sum_{i} w_{i}x_{i} + b}+1}\\
+	P(y_{i} = 1|x_{i},\theta) = \frac{e^{\sum_{i} w_{i}x_{i} + b}}{e^{\sum_{i} w_{i}x_{i} + b}+1}\\
+	P(y_{i}|x_{i},\theta) = \frac{e^{y_{i}\sum_{i} w_{i}x_{i} + b}}{e^{\sum_{i} w_{i}x_{i} + b}+1}
+\end{aligned}
+\end{equation*}
 How do we \emph{learn parameters} \data{$\theta$}?
 
 \section{Cross-Entropy Loss}\label{sec:cross-entropy-loss}
 \begin{itemize}
 	\item We want to know \emph{how far} is the \emph{classifier output} \data{$\hat{y}$} from the \emph{true output} \data{$y$}.
 	Let's call this difference \data{$L(\hat{y},y)$}.
-	\item Since there are only \emph{2 discrete outcomes} (0 or 1), we can express the probability $P(y|x)$ from our classifiers as:
+	\item Since there are only \emph{2 discrete outcomes} (0 or 1), we can express the probability \data{$P(y|x)$} from our classifiers as:
 	\data{\[ P(y|x) = \hat{y}^{y}\cdot (1-\hat{y})^{1-y} \]}
 	\item Goal: \emph{maximize the probability} of the correct label \data{$P(y|x)$.}
 	\item Maximize:
@@ -96,13 +152,34 @@ How do we \emph{learn parameters} \data{$\theta$}?
 	\end{aligned}
 	\end{equation*}}
 	\item We want to \emph{minimize} the \emph{cross-entropy loss}:
+	\begin{equation*}
+	\begin{aligned}[eqpurple]
+		\mathbf{Minimize:\ } L_{CE}(\hat{y}, y) &= -\log P(y|x)\\
+		&= -\left[ y\log(\hat{y}) + (1 - y)\log(1 - \hat{y}) \right]\\
+		\min_{\theta} L_{CE}(\hat{y}, y) &= -\left[ y\log(\hat{y}) + (1 - y)\log(1 - \hat{y}) \right]\\
+		&= -\left[ y\log\left( \frac{e^{\sum_{i} w_{i}x_{i} + b}}{1 + e^{\sum_{i} w_{i}x_{i} + b}} \right) + (1 - y)\log\left(1 - \frac{e^{\sum_{i} w_{i}x_{i} + b}}{1 + e^{\sum_{i} w_{i}x_{i} + b}}\right) \right]\\
+		&= -\left[ y\left( \sum_{i} w_{i}x_{i} + b - \log\left( 1 + e^{\sum_{i} w_{i}x_{i} + b} \right) \right) + (1-y)\left( -\log\left( 1 + e^{\sum_{i} w_{i}x_{i} + b} \right) \right) \right]\\
+		&= -\left[ y\left( \sum_{i} w_{i}x_{i} + b \right) - \log\left( 1 + e^{\sum_{i} w_{i}x_{i} + b} \right) \right]\\
+		&= \log\left( 1 + e^{\sum_{i} w_{i}x_{i} + b} \right) + y\left( \sum_{i} w_{i}x_{i} + b \right)\\
+	\end{aligned}
+	\end{equation*}
 \end{itemize}
 
 \section{Minimizing Cross-Entropy Loss}\label{sec:minimizing-cross-entropy-loss}
 \data{\[ \min_{\theta} L_{CE}(\hat{y}, y) \]}
 \begin{itemize}
 	\item Minimizing loss function \data{$L_{CE}(\hat{y},y)$} is a \emph{convex optimization problem}.
+	\item \emph{Convex } function have a \emph{global minimum}.
+	\item \emph{Concave } function have a \emph{global maxima}.
 \end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{figures/4/concave_convex}
+	\caption{An example of a convec and concave function.}
+	\label{fig:concave-convex}
+\end{figure}
+
 
 \section{Optimizing a Convex/Concave Function}\label{sec:optimizing-a-convex/concave-function}
 \begin{itemize}
@@ -116,21 +193,21 @@ How do we \emph{learn parameters} \data{$\theta$}?
 	\item The \emph{gradient} of a \emph{function} is a \emph{vector pointing} in the \emph{direction} of the \emph{greatest increase} in a function.
 \end{itemize}
 \begin{description}
-	\item[\emph{Gradient Ascent}]
-	\item[\emph{Gradient Descent}]
+	\item[\emph{Gradient Ascent}:] Find the gradient of the function at the current point and \emph{move} in the \emph{same direction}.
+	\item[\emph{Gradient Descent}:] Find the gradient of the function at the current point and \emph{move} in the \emph{opposite direction}.
 \end{description}
 
 \section{Gradient Descent for Logistic Regression}\label{sec:gradient-descent-for-logistic-regression}
 \begin{itemize}
 	\item Let us represent $\hat{y}=f(x, \theta)$
 	\item Gradient:
-	\begin{equation}
+	\begin{equation}[eqpurple]
 		\nabla_{\theta} L(f(x,\theta), y) = \left[ \frac{\partial L(f(x, \theta), y)}{\partial b} , \frac{\partial L(f(x, \theta), y)}{\partial w_{1}}, \frac{\partial L(f(x, \theta), y)}{\partial w_{2}}, \dots, \frac{\partial L(f(x, \theta), y)}{\partial w_{d}} \right]
 		\label{eq:gradient}
 	\end{equation}
 	\item Update Rule:
-	\begin{equation}
-	\begin{aligned}
+	\begin{equation}[eqpurple]
+	\begin{aligned}[eqpurple]
 		\Delta\theta &= \eta\cdot\nabla_{\theta}L(f(x,\theta), y)\\
 		\theta_{t+1} &= \theta_{t} - \eta\cdot\frac{\partial}{\partial (w,b)}L(f(x,\theta), y)
 	\end{aligned}
@@ -140,7 +217,7 @@ How do we \emph{learn parameters} \data{$\theta$}?
 Gradient descent algorithm will \emph{iterate} until \data{$\Delta\theta < \epsilon$}.
 
 \begin{equation*}
-\begin{aligned}
+\begin{aligned}[eqpurple]
 	L_{CE}(f(x, \theta), y) &= \log\left( 1 + e^{\sum_{i} w_{i}x_{i} + b} \right) - y\left( \sum_{i}w_{i}x_{i} + b \right)\\
 	\theta_{t+1} &= \theta_{t} - \eta\cdot\frac{\partial}{\partial (w,b)}L(f(x,\theta), y)\\
 				 &= \theta_{t} - \eta\cdot x_{i}\left[ \frac{e^{\sum_{i} w_{i}x_{i} + b}}{1 + e^{\sum_{i} w_{i}x_{i} + b}} - y \right]\\
@@ -154,6 +231,30 @@ Gradient descent algorithm will \emph{iterate} until \data{$\Delta\theta < \epsi
 	\item \emph{Large} \data{$\eta$} $\Rightarrow$ Fast convergence but larger residual error.
 	Also, possible oscillations.
 	\item \emph{Small} \data{$\eta$} $\Rightarrow$ Slow convergence but small residual error.
+\end{itemize}
+
+% TODO: Add the Sentiment Classification Example
+
+\section{Batch Training}\label{sec:batch-training}
+\begin{itemize}
+	\item Stochastic gradient descent is called \emph{stochastic} because it chooses a \emph{single random example} at a time, moving the weights to improve performance on that single example.
+	\item This results in very choppy movements, so it's \emph{common} to \emph{compute} the \emph{gradient over batches} of training instances rather than a single instance.
+	\item \emph{Training data: } \data{$\{ x_{i}, y_{i} \}_{i=i\dots n}$} where \data{$x_{i} = ( x_{i1},  x_{i2}, \dots,   x_{id} )$}, \data{$n$} is the total \emph{instances} in a \emph{batch} and \data{$d$} is the \emph{dimension} of an instance.
+	\begin{equation}
+		\theta_{t+1} = \theta_{t} - \frac{\eta}{n} \times \sum_{i=1}^{n} xij \left[ \frac{1}{1 + e^{-\theta^{T}\vec{x}}} - y_{i} \right]
+		\label{eq:batch-training}
+	\end{equation}
+\end{itemize}
+
+\section{Understanding the Sigmoid}\label{sec:understanding-the-sigmoid}
+\begin{itemize}
+	\item Large weights lead to \hyperref[sec:fitting]{\emph{overfitting}}.
+	\item \emph{Penalizing} larger weights can \hyperref[subsec:resolving-overfitting]{\emph{reduce}} overfitting.
+\end{itemize}
+
+\section{Regularization}\label{sec:regularization}
+\begin{itemize}
+	\item Regularization is used to \emph{avoid overfitting}.
 \end{itemize}
 
 \end{document}

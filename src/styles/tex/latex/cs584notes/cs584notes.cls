@@ -22,6 +22,7 @@
 \RequirePackage[title={\csnotes@number\ - \csnotes@title}]{cs584}
 \RequirePackage{enumitem}
 \RequirePackage[most]{tcolorbox}
+\RequirePackage{mdsymbol}
 
 \setcounter{chapter}{\csnotes@number}
 \addtocounter{chapter}{-1}
@@ -62,3 +63,43 @@
 }{
 	\enddoc
 }
+
+\let\eq\equation
+\let\endeq\endequation
+\def\eqs{\equation*}
+\def\endeqs{\endequation*}
+
+\let\al\aligned
+\let\endal\endaligned
+
+\definecolor{eqred}{HTML}{ff0000}
+\definecolor{eqpurple}{HTML}{7030a0}
+\definecolor{eqblue}{HTML}{0000ff}
+
+\renewenvironment{equation}[1][eqred]
+{%
+	\color{#1}%
+	\eq%
+}{%
+	\endeq%
+}
+
+\renewenvironment{aligned}[1][eqred]
+{%
+	\color{#1}%
+	\al%
+}{%
+	\endal%
+}
+
+%\renewenvironment{equation*}[1][eqred]
+%{%
+%	\color{#1}%
+%	\eqs%
+%}{%
+%	\endeqs%
+%}
+
+\definecolor{lightgreen}{HTML}{e9f1e8}
+\definecolor{medgreen}{HTML}{d0e1cd}
+\definecolor{darkgreen}{HTML}{4ea72e}

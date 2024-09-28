@@ -91,12 +91,12 @@ A well-defined \emph{learning task} is given by \emph{$<P,T,E>$}.
 \begin{itemize}
 	\item \definition{Normalization}{Rescale the \emph{data} \data{$x$} using the \emph{mean} \data{$(\mu)$} and the \emph{standard deviation} \data{$(\sigma)$} of the data.}
 	\begin{equation}
-		\data{x_{norm} = \frac{x - \mu}{\sigma}}
+		x_{norm} = \frac{x - \mu}{\sigma}
 		\label{eq:normalization}
 	\end{equation}
 	\item \emph{Min-Max Scaling}:
 	\begin{equation}
-		\data{x_{minmax} = \frac{x - x_{min}}{x_{max} - x_{min}}}
+		x_{minmax} = \frac{x - x_{min}}{x_{max} - x_{min}}
 		\label{eq:min-max-scaling}
 	\end{equation}
 \end{itemize}
@@ -208,12 +208,12 @@ Consider a \emph{hypothesis \data{$h$}} and its$\dots$
 \end{itemize}
 
 Hypothesis \data{$h$} \emph{overfits} the training error if there is an alternative hypothesis \data{$h'$} such that
-\data{\begin{equation}
+\begin{equation}
 \begin{aligned}
 	error_{train}(h) &< error_{train}(h')\\
 	error_{true}(h) &> error_{true}(h')
 \end{aligned}\label{eq:hypothesis}
-\end{equation}}
+\end{equation}
 
 \subsection{Resolving Underfitting}\label{subsec:resolving-underfitting}
 \begin{itemize}
@@ -303,12 +303,12 @@ Hypothesis \data{$h$} \emph{overfits} the training error if there is an alternat
 \begin{itemize}
 	\item The goal of both AIC and BIC is to \emph{balance} the \emph{goodness-of-fit} of the model with its \emph{complexity}, in order to avoid overfitting or underfitting.
 	\item Both \emph{AIC} and \emph{BIC} \emph{penalize models} with \emph{large number of parameters} relative to the \emph{size} of the \emph{data}, but BIC penalizes more severely.
-	\data{\begin{equation}
+	\begin{equation}
 		\begin{aligned}
 			\min AIC &= \min\left\{ 2m - 2\log(L) \right\}\\
 			\min BIC &= \min\left\{ m\log(n) - 2\log(L) \right\}
 		\end{aligned}\label{eq:aic-bic}
-	\end{equation}}
+	\end{equation}
 	where \data{$m$} is the \emph{number} of \emph{model parameters}, \data{$n$} is the \emph{number} of \emph{data points}, and \data{$L$} is the \emph{maximum likelihood} of the model.
 \end{itemize}
 

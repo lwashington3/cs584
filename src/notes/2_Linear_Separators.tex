@@ -165,10 +165,10 @@ Then for each training example \data{$(\vec{x}_{i}, y_{i})$}
 \end{equation*}}
 
 Geometrically, the \emph{distance} between the \emph{2 hyperplanes} can be expressed as:
-\data{\begin{equation}
+\begin{equation}
 	\rho = \frac{2}{||w||}
 	\label{eq:hyperplane-distance}
-\end{equation}}
+\end{equation}
 
 Then we can formulate the \emph{quadratic optimization problem}:
 
@@ -333,34 +333,34 @@ The solution is:
 
 \section{Kernel Functions}\label{sec:kernel-functions}
 Linear:
-\data{\begin{equation}
+\begin{equation}
 	K(\vec{x}_{i}, \vec{x}_{j}) = \vec{x}_{i} \cdot \vec{x}_{j}
 	\label{eq:linear-kernel}
-\end{equation}}
+\end{equation}
 
 Polynomial:
-\data{\begin{equation}
+\begin{equation}
 	K(\vec{x}_{i}, \vec{x}_{j}) = \left(1 + \vec{x}_{i} \cdot \vec{x}_{j} \right)^{p}
 	\label{eq:polynomial-kernel}
-\end{equation}}
+\end{equation}
 
 Gaussian (Radial Basis Function):
-\data{\begin{equation}
+\begin{equation}
 	K(\vec{x}_{i}, \vec{x}_{j}) = e^{\left( \frac{-|| \vec{x}_{i} - \vec{x}_{j} ||^{2}}{2\sigma^{2}} \right)}
 	\label{eq:gaussian-kernel}
-\end{equation}}
+\end{equation}
 
 Laplace:
-\data{\begin{equation}
+\begin{equation}
 	K(\vec{x}_{i}, \vec{x}_{j}) = e^{\left( \frac{-|| \vec{x}_{i} - \vec{x}_{j} ||}{2\sigma^{2}} \right)}
 	\label{eq:laplace-kernel}
-\end{equation}}
+\end{equation}
 
 Sigmoid:
-\data{\begin{equation}
+\begin{equation}
 	K(\vec{x}_{i}, \vec{x}_{j}) = \tanh\left( \kappa (\vec{x}_{i} \cdot \vec{x}_{j}) + \sigma \right)
 	\label{eq:sigmoid-kernel}
-\end{equation}}
+\end{equation}
 
 \section{Kernel Trick}\label{sec:kernel-trick}
 \begin{itemize}
@@ -405,11 +405,10 @@ For some \emph{functions} \data{$K(\vec{x}_{i}, \vec{x}_{j})$} checking that \da
 \end{svmbox}
 
 The solution is:
-\data{\begin{equation}
+\begin{equation}
 	f(\vec{x}) = \sum \alpha_{i} y_{i} K(\vec{x}_{i}, \vec{x}_{j}) + b
 	\label{eq:non-linear-svms}
-\end{equation}}
-
+\end{equation}
 
 \begin{figure}[H]
 	\centering
@@ -417,7 +416,6 @@ The solution is:
 	\caption{}
 	\label{fig:infinite-dimension}
 \end{figure}
-
 
 \section{Kernel Closure Properties}\label{sec:kernel-closure-properties}
 \begin{itemize}
