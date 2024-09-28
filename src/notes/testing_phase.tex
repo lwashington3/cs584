@@ -1,0 +1,22 @@
+\begin{table}[H]
+	\centering
+	\caption{}
+	\label{tab:training-5}
+	\begin{tabular}{*{5}{|c}|}
+		\hline
+		\textcolor{lightblue}{$x$} & \textcolor{red}{$y$} & $\theta^{T}\vec{x}$ & $\mathbf{P} = \left( \frac{1}{1 + e^{-\vec{\theta}^{T}\vec{x}} } - y \right) $ & \textcolor{red}{\textbf{Predicted Class} $\hat{y}$}\\
+		\hline
+		[1, 1, 1, 0, 1, 1] & \textbf{1} & $[0, 0, 0.5, 0, -0.5, 0.5] \times [1, 1, 1, 0, 1, 1] = 0.5$ & 0.622459331 & \textbf{1} \\
+		\hline
+		[1, 0, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0.5, 0, -0.5, 0.5] \times [1, 0, 0, 1, 1, 0] = -0.5$ & 0.377540669 & \textbf{0} \\
+		\hline
+		[1, 0, 1, 1, 0, 0] & \textbf{1} & $[0, 0, 0.5, 0, -0.5, 0.5] \times [1, 0, 1, 1, 0, 0] = 0.5$ & 0.622459331 & \textbf{1} \\
+		\hline
+		[1, 1, 0, 0, 1, 0] & \textbf{0} & $[0, 0, 0.5, 0, -0.5, 0.5] \times [1, 1, 0, 0, 1, 0] = -0.5$ & 0.377540669 & \textbf{0} \\
+		\hline
+		[1, 1, 0, 1, 0, 1] & \textbf{1} & $[0, 0, 0.5, 0, -0.5, 0.5] \times [1, 1, 0, 1, 0, 1] = 0.5$ & 0.622459331 & \textbf{1} \\
+		\hline
+		[1, 1, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0.5, 0, -0.5, 0.5] \times [1, 1, 0, 1, 1, 0] = -0.5$ & 0.377540669 & \textbf{0} \\
+		\hline
+	\end{tabular}
+\end{table}

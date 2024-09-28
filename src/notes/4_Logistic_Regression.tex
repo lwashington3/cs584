@@ -255,6 +255,185 @@ Gradient descent algorithm will \emph{iterate} until \data{$\Delta\theta < \epsi
 \section{Regularization}\label{sec:regularization}
 \begin{itemize}
 	\item Regularization is used to \emph{avoid overfitting}.
+	\item The \emph{weights} for features will \emph{attempt} to perfectly \emph{fit} details of the training set, modeling even \emph{noisy data} that just accidentally correlate with the class.
+	The problem is called \emph{overfitting}.
+	\item A \emph{good model} should \emph{generalize well} from the training data to the \emph{unseen test set}, but a model that \emph{overfits} will have \emph{poor generalization}.
+	\item To avoid overfitting, a new \emph{regularization term} \data{$R(\theta)$} is added to the loss function.
+	\begin{equation}
+		\min_{\theta} L_{reg}(\hat{y}, y) = -\frac{1}{n} \sum_{i=1}^{n} \left[ y\log(\hat{y}) + (1 - y)\log(1 - \hat{y}) \right] + \lambda R(\theta)
+		\label{eq:regulatization}
+	\end{equation}
+\end{itemize}
+
+\section{L1 Regularization}\label{sec:l1-regularization}
+\begin{itemize}
+	\item L1 Regularization is also called \emph{Lasso Regularization}.
+	\item Uses the L1 norm (\emph{Manhattan distance}) of the weights.
+	\[ \data{ R(\theta) = ||\theta||_{1} = \sum_{j=0}^{d} |\theta_{j}| } \]
+\end{itemize}
+\begin{equation}
+	\min_{\theta} L_{reg}(\hat{y}, y) = -\frac{1}{n} \sum_{i=1}^{n} \left[ y\log(\hat{y}) + (1 - y)\log(1 - \hat{y}) \right] + \lambda\sum_{j=0}^{d}|\theta_{j}|
+	\label{eq:l1-regulatization}
+\end{equation}
+
+\section{L2 Regularization}\label{sec:l2-regularization}
+\begin{itemize}
+	\item L2 Regularization is also called \emph{Ridge Regularization}.
+	\item Uses the square of the \emph{L2 (Euclidean) norm} of the weights.
+	\[ \data{ R(\theta) = ||\theta||_{2}^{2} = \sum_{j=0}^{d} \theta_{j}^{2} } \]
+\end{itemize}
+\begin{equation}
+	\min_{\theta} L_{reg}(\hat{y}, y) = -\frac{1}{n} \sum_{i=1}^{n} \left[ y\log(\hat{y}) + (1 - y)\log(1 - \hat{y}) \right] + \lambda\sum_{j=0}^{d} \theta_{j}^{2}
+	\label{eq:l2-regulatization}
+\end{equation}
+
+\section{Example -- Spam Recognition}\label{sec:example----spam-recognition}
+Let us apply logistic regression on the spam email recognition problem, assuming \data{$\eta = 3.0$} and starting with \data{$\theta_{w, b} = [0, 0, 0, 0, 0, 0]$}.
+\begin{table}[H]
+	\centering
+	\caption{}
+	\label{tab:spam-data}
+	\begin{tabular}{*{7}{|C{0.1\textwidth}}|}
+		\hline
+		\rowcolor{lightblue} & \tableheader{and} & \tableheader{vaccine} & \tableheader{the} & \tableheader{of} & \tableheader{nigeria} & \cellcolor{red} \tableheader{y}\\
+		\hline
+		Email \textbf{a} & 1 & 1 & 0 & 1 & 1 & 1\\
+		\hline
+		Email \textbf{b} & 0 & 0 & 1 & 1 & 0 & 0\\
+		\hline
+		Email \textbf{c} & 0 & 1 & 1 & 0 & 0 & 1\\
+		\hline
+		Email \textbf{d} & 1 & 0 & 0 & 1 & 0 & 0\\
+		\hline
+		Email \textbf{e} & 1 & 0 & 1 & 0 & 1 & 1\\
+		\hline
+		Email \textbf{f} & 1 & 0 & 1 & 1 & 0 & 0\\
+		\hline
+	\end{tabular}
+\end{table}
+1 entails that a word (i.e., ``and'') is present in an email (i.e.\ ``Email \textbf{a}'') and 0 entails that a word is absent in an email.
+
+\begin{table}[H]
+	\centering
+	\caption{}
+	\label{tab:formatted-spam-data}
+	\begin{tabular}{*{8}{|c}|}
+		\hline
+		\rowcolor{lightblue} & $x_{0} = \textcolor{white}{1}$ & $x_{1} = $ \tableheader{and} & $x_{2} = $ \tableheader{vaccine} & $x_{3} = $ \tableheader{the} & $x_{4} = $ \tableheader{of} & $x_{5} = $ \tableheader{nigeria} & \cellcolor{red} \tableheader{y}\\
+		\hline
+		Email \textbf{a} & 1 & 1 & 1 & 0 & 1 & 1 & 1\\
+		\hline
+		Email \textbf{b} & 1 & 0 & 0 & 1 & 1 & 0 & 0\\
+		\hline
+		Email \textbf{c} & 1 & 0 & 1 & 1 & 0 & 0 & 1\\
+		\hline
+		Email \textbf{d} & 1 & 1 & 0 & 0 & 1 & 0 & 0\\
+		\hline
+		Email \textbf{e} & 1 & 1 & 0 & 1 & 0 & 1 & 1\\
+		\hline
+		Email \textbf{f} & 1 & 1 & 0 & 1 & 1 & 0 & 0\\
+		\hline
+	\end{tabular}
+\end{table}
+The column $x_{0}$ was added to account for this bias \data{$b$}.
+
+\data{$x = [x_{0}, x_{1}, x_{2}, x_{3}, x_{4}, x_{5}]$},  \data{$\theta = [b, w_{1}, w_{2}, w_{3}, w_{4}, w_{5}]$}
+
+\section{Training Phase}\label{sec:training-phase}
+\begin{equation*}
+\begin{aligned}[eqpurple]
+	\theta_{t+1} = \theta_{t} - \frac{\eta}{n}\times \sum_{i=1}^{n} x_{ij}\left[ \frac{1}{1 + e^{-\theta^{T}\vec{x}}} - y_{i} \right]
+\end{aligned}
+\end{equation*}
+
+\begin{enumerate}[label=\arabic*)]
+	\item Calculate the factor $-\theta^{T}\vec{x}$ for every example in the dataset.
+	\item Calculate the factor $\sum_{i=1}^{n} x_{ij}\left[ \frac{1}{1 + e^{-\theta^{T}\vec{x}}} - y_{i} \right]$ for every example in the dataset, for every \data{$\theta$}
+	\item Compute every \data{$\theta$}
+\end{enumerate}
+
+\input{training_phase}
+
+\begin{equation*}
+\begin{aligned}
+	\theta_{1} &= \theta_{0} - \frac{\eta}{n} \times \sum_{i=1}^{n} x_{ij} \left[ \frac{1}{1 + e^{-\theta^{T}x}} - y_{i} \right]\\
+				&= \left[ \begin{array}{c}
+					0\\
+					0\\
+					0\\
+					0\\
+					0\\
+					0\\
+			    \end{array} \right] - \frac{3}{6}\left[ \begin{array}{c}
+					0\\
+					0\\
+					-1\\
+					0\\
+					1\\
+					-1\\
+			    \end{array} \right]\\
+				&= \left[ \begin{array}{c}
+					0\\
+					0\\
+					0\\
+					0\\
+					0\\
+					0\\
+			   \end{array} \right] - \frac{1}{2}\left[ \begin{array}{c}
+					0\\
+					0\\
+					-1\\
+					0\\
+					1\\
+					-1\\
+			   \end{array} \right]\\
+				&= \left[ \begin{array}{c}
+					0\\
+					0\\
+					\frac{1}{2}\\
+					0\\
+					-\frac{1}{2}\\
+					\frac{1}{2}\\
+			   \end{array} \right]\\
+\end{aligned}
+\end{equation*}
+
+\section{Testing Phase}\label{sec:testing-phase}
+Let us test logistic regression on the spam email recognition problem using the \data{$\theta = [0, 0, 0.5, 0, -0.5, 0.5]$}.
+\input{testing_phase}
+No Misclassification
+
+\section{Multinomial Logistic Regression}\label{sec:multinomial-logistic-regression}
+\begin{itemize}
+	\item The \emph{loss function} for multinomial logistic regression \emph{generalizes} the loss function for binary logistic regression from \data{$2$} to \data{$K$} \emph{classes}.
+	\item The \emph{true label} \data{$y$} is a vector with \data{$K$} elements, each corresponding to a class, with \data{$y_{c} = 1$} if the \emph{correct class} is \data{$c$}, with all \emph{other elements} of \data{$y$} being \data{$0$}.
+	\item The \emph{classifier} will produce an \emph{estimate vector} with \data{$K$} elements \data{$\hat{y}$}, each element \data{$\hat{y}_{k}$} of which represents the estimated \emph{probability} \data{$P(y_{k} = 1 | x)$}.
+\end{itemize}
+
+\begin{gather}
+	\Call{Softmax}{z_{i}} = \frac{\exp(z_{i})}{\sum_{j=1}^{K} \exp{z_{j}}}\ \ 1 \leq i \leq K\\
+	\label{eq:multinomial-softmax}
+	%
+	L_{CE}(\hat{y}, y) = -\sum_{k=1}^{K} y_{k} \log(\hat{y}_{k}) \\
+	\begin{aligned}
+		L_{CE}(\hat{y}, y) &= -\log(\hat{y}_{c})\\
+						   &= -\log\left( \frac{e^{\sum_{i=1}^{d} w_{c}x_{i} + b_{c}}}{\sum_{j=1}^{K} e^{\sum_{i=1}^{d} w_{j}x_{i} + b_{j}}} \right)
+	\end{aligned}\\
+	\label{eq:multinomial-loss}
+	\frac{\partial L_{CE}}{\partial (w_{k}, b_{k})} = x_{i}\left[ \frac{e^{\sum_{i=1}^{d} w_{k}x_{i} + b_{k}}}{\sum_{j=1}^{K} e^{\sum_{i=1}^{d} w_{j}x_{i} + b_{j}}} - y_{k} \right]
+\end{gather}
+
+\section{Conclusion}\label{sec:conclusion}
+Logistic Regression --
+\begin{itemize}
+	\item is a discriminative classifier,
+	\item is a linear classifier,
+	\item optimizes by minimizing the cross-entropy loss via gradient descent,
+	\item trains parameters:
+	\begin{itemize}
+		\item begins with initial weight vector,
+		\item modifies it iteratively to minimize the loss function.
+	\end{itemize}
 \end{itemize}
 
 \end{document}

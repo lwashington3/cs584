@@ -1,0 +1,168 @@
+\begin{table}[H]
+	\centering
+	\caption{}
+	\label{tab:training-0}
+	\begin{tabular}{*{4}{|c}|}
+		\hline
+		\textcolor{lightblue}{$x$} & \textcolor{red}{$y$} & $\theta^{T}\vec{x}$ & $\left( \frac{1}{1 + e^{-\vec{\theta}^{T}\vec{x}} } - \textcolor{red}{y} \right) \textcolor{lightblue}{x_{0}}$\\
+		\hline
+		[1, 1, 1, 0, 1, 1] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 1, 0, 1, 1] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{1} = -0.5$\\
+		\hline
+		[1, 0, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 0, 0, 1, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{1} = 0.5$\\
+		\hline
+		[1, 0, 1, 1, 0, 0] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 0, 1, 1, 0, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{1} = -0.5$\\
+		\hline
+		[1, 1, 0, 0, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 0, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{1} = 0.5$\\
+		\hline
+		[1, 1, 0, 1, 0, 1] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 1, 0, 1] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{1} = -0.5$\\
+		\hline
+		[1, 1, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 1, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{1} = 0.5$\\
+		\hline
+	\end{tabular}
+\end{table}
+\begin{equation*}
+\begin{aligned}[eqpurple]
+	\sum_{i=1}^6 x_{i0} \left[ \frac{1}{ 1 + e^{\vec{\theta^{T}}\vec{x}}} - y_{i} \right] &= -0.5 + 0.5 - 0.5 + 0.5 - 0.5 + 0.5 \\
+&= 0.0
+\end{aligned}
+\end{equation*}
+\begin{table}[H]
+	\centering
+	\caption{}
+	\label{tab:training-1}
+	\begin{tabular}{*{4}{|c}|}
+		\hline
+		\textcolor{lightblue}{$x$} & \textcolor{red}{$y$} & $\theta^{T}\vec{x}$ & $\left( \frac{1}{1 + e^{-\vec{\theta}^{T}\vec{x}} } - \textcolor{red}{y} \right) \textcolor{lightblue}{x_{1}}$\\
+		\hline
+		[1, 1, 1, 0, 1, 1] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 1, 0, 1, 1] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{1} = -0.5$\\
+		\hline
+		[1, 0, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 0, 0, 1, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+		[1, 0, 1, 1, 0, 0] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 0, 1, 1, 0, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+		[1, 1, 0, 0, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 0, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{1} = 0.5$\\
+		\hline
+		[1, 1, 0, 1, 0, 1] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 1, 0, 1] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{1} = -0.5$\\
+		\hline
+		[1, 1, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 1, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{1} = 0.5$\\
+		\hline
+	\end{tabular}
+\end{table}
+\begin{equation*}
+\begin{aligned}[eqpurple]
+	\sum_{i=1}^6 x_{i1} \left[ \frac{1}{ 1 + e^{\vec{\theta^{T}}\vec{x}}} - y_{i} \right] &= -0.5 + 0 + 0 + 0.5 - 0.5 + 0.5 \\
+&= 0.0
+\end{aligned}
+\end{equation*}
+\begin{table}[H]
+	\centering
+	\caption{}
+	\label{tab:training-2}
+	\begin{tabular}{*{4}{|c}|}
+		\hline
+		\textcolor{lightblue}{$x$} & \textcolor{red}{$y$} & $\theta^{T}\vec{x}$ & $\left( \frac{1}{1 + e^{-\vec{\theta}^{T}\vec{x}} } - \textcolor{red}{y} \right) \textcolor{lightblue}{x_{2}}$\\
+		\hline
+		[1, 1, 1, 0, 1, 1] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 1, 0, 1, 1] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{1} = -0.5$\\
+		\hline
+		[1, 0, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 0, 0, 1, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+		[1, 0, 1, 1, 0, 0] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 0, 1, 1, 0, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{1} = -0.5$\\
+		\hline
+		[1, 1, 0, 0, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 0, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+		[1, 1, 0, 1, 0, 1] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 1, 0, 1] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+		[1, 1, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 1, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+	\end{tabular}
+\end{table}
+\begin{equation*}
+\begin{aligned}[eqpurple]
+	\sum_{i=1}^6 x_{i2} \left[ \frac{1}{ 1 + e^{\vec{\theta^{T}}\vec{x}}} - y_{i} \right] &= -0.5 + 0 - 0.5 + 0 + 0 + 0 \\
+&= -1.0
+\end{aligned}
+\end{equation*}
+\begin{table}[H]
+	\centering
+	\caption{}
+	\label{tab:training-3}
+	\begin{tabular}{*{4}{|c}|}
+		\hline
+		\textcolor{lightblue}{$x$} & \textcolor{red}{$y$} & $\theta^{T}\vec{x}$ & $\left( \frac{1}{1 + e^{-\vec{\theta}^{T}\vec{x}} } - \textcolor{red}{y} \right) \textcolor{lightblue}{x_{3}}$\\
+		\hline
+		[1, 1, 1, 0, 1, 1] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 1, 0, 1, 1] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+		[1, 0, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 0, 0, 1, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{1} = 0.5$\\
+		\hline
+		[1, 0, 1, 1, 0, 0] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 0, 1, 1, 0, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{1} = -0.5$\\
+		\hline
+		[1, 1, 0, 0, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 0, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+		[1, 1, 0, 1, 0, 1] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 1, 0, 1] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{1} = -0.5$\\
+		\hline
+		[1, 1, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 1, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{1} = 0.5$\\
+		\hline
+	\end{tabular}
+\end{table}
+\begin{equation*}
+\begin{aligned}[eqpurple]
+	\sum_{i=1}^6 x_{i3} \left[ \frac{1}{ 1 + e^{\vec{\theta^{T}}\vec{x}}} - y_{i} \right] &= 0 + 0.5 - 0.5 + 0 - 0.5 + 0.5 \\
+&= 0.0
+\end{aligned}
+\end{equation*}
+\begin{table}[H]
+	\centering
+	\caption{}
+	\label{tab:training-4}
+	\begin{tabular}{*{4}{|c}|}
+		\hline
+		\textcolor{lightblue}{$x$} & \textcolor{red}{$y$} & $\theta^{T}\vec{x}$ & $\left( \frac{1}{1 + e^{-\vec{\theta}^{T}\vec{x}} } - \textcolor{red}{y} \right) \textcolor{lightblue}{x_{4}}$\\
+		\hline
+		[1, 1, 1, 0, 1, 1] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 1, 0, 1, 1] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{1} = -0.5$\\
+		\hline
+		[1, 0, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 0, 0, 1, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{1} = 0.5$\\
+		\hline
+		[1, 0, 1, 1, 0, 0] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 0, 1, 1, 0, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+		[1, 1, 0, 0, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 0, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{1} = 0.5$\\
+		\hline
+		[1, 1, 0, 1, 0, 1] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 1, 0, 1] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+		[1, 1, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 1, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{1} = 0.5$\\
+		\hline
+	\end{tabular}
+\end{table}
+\begin{equation*}
+\begin{aligned}[eqpurple]
+	\sum_{i=1}^6 x_{i4} \left[ \frac{1}{ 1 + e^{\vec{\theta^{T}}\vec{x}}} - y_{i} \right] &= -0.5 + 0.5 + 0 + 0.5 + 0 + 0.5 \\
+&= 1.0
+\end{aligned}
+\end{equation*}
+\begin{table}[H]
+	\centering
+	\caption{}
+	\label{tab:training-5}
+	\begin{tabular}{*{4}{|c}|}
+		\hline
+		\textcolor{lightblue}{$x$} & \textcolor{red}{$y$} & $\theta^{T}\vec{x}$ & $\left( \frac{1}{1 + e^{-\vec{\theta}^{T}\vec{x}} } - \textcolor{red}{y} \right) \textcolor{lightblue}{x_{5}}$\\
+		\hline
+		[1, 1, 1, 0, 1, 1] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 1, 0, 1, 1] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{1} = -0.5$\\
+		\hline
+		[1, 0, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 0, 0, 1, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+		[1, 0, 1, 1, 0, 0] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 0, 1, 1, 0, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+		[1, 1, 0, 0, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 0, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+		[1, 1, 0, 1, 0, 1] & \textbf{1} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 1, 0, 1] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{1}} \right) \times \textcolor{lightblue}{1} = -0.5$\\
+		\hline
+		[1, 1, 0, 1, 1, 0] & \textbf{0} & $[0, 0, 0, 0, 0, 0] \times [1, 1, 0, 1, 1, 0] = 0$ & $\left( \frac{1}{1 + e^{0}} - \textcolor{red}{\mathbf{0}} \right) \times \textcolor{lightblue}{0} = 0$\\
+		\hline
+	\end{tabular}
+\end{table}
+\begin{equation*}
+\begin{aligned}[eqpurple]
+	\sum_{i=1}^6 x_{i5} \left[ \frac{1}{ 1 + e^{\vec{\theta^{T}}\vec{x}}} - y_{i} \right] &= -0.5 + 0 + 0 + 0 - 0.5 + 0 \\
+&= -1.0
+\end{aligned}
+\end{equation*}

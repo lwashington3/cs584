@@ -72,6 +72,9 @@
 \let\al\aligned
 \let\endal\endaligned
 
+\let\gat\gather
+\let\endgat\endgather
+
 \definecolor{eqred}{HTML}{ff0000}
 \definecolor{eqpurple}{HTML}{7030a0}
 \definecolor{eqblue}{HTML}{0000ff}
@@ -92,6 +95,14 @@
 	\endal%
 }
 
+\renewenvironment{gather}[1][eqred]
+{%
+	\color{#1}%
+	\gat%
+}{%
+	\endgat%
+}
+
 %\renewenvironment{equation*}[1][eqred]
 %{%
 %	\color{#1}%
@@ -103,3 +114,7 @@
 \definecolor{lightgreen}{HTML}{e9f1e8}
 \definecolor{medgreen}{HTML}{d0e1cd}
 \definecolor{darkgreen}{HTML}{4ea72e}
+
+\definecolor{lightblue}{HTML}{00b0f0}
+
+\newcommand{\tableheader}[1]{\textbf{\textcolor{white}{#1}}}
