@@ -17,9 +17,9 @@
 
 \ProcessKeyvalOptions*
 
-\LoadClass[12pt]{report}
+\LoadClass[12pt,twocolumn]{report}
 
-\RequirePackage[title={\csnotes@number\ - \csnotes@title}]{cs584}
+\RequirePackage[title={\ifnum\csnotes@number=0\csnotes@number\ - \fi\csnotes@title}]{cs584}
 \RequirePackage{enumitem}
 \RequirePackage[most]{tcolorbox}
 \RequirePackage{mdsymbol}
@@ -118,3 +118,5 @@
 \definecolor{lightblue}{HTML}{00b0f0}
 
 \newcommand{\tableheader}[1]{\textbf{\textcolor{white}{#1}}}
+
+\newcommand{\tildehat}[1]{\hat{#1}} % TODO: Make the tildehat actuaDlly have a tilde

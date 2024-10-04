@@ -1,0 +1,772 @@
+%! Author = Len Washington III
+%! Date = 10/4/24
+
+% Preamble
+\documentclass[
+	exam={Midterm}
+]{cs584exam}
+
+\newcommand{\learningtask}[3]{%
+	\begin{description}
+	\item[$T$]: #1
+	\item[$P$]: #2
+	\item[$E$]: #3
+	\end{description}
+	\vspace*{0.25em}
+}
+\newcommand{\predict}[2]{\textcolor{black}{\ \rightarrow\mbox{predict } (#1) \mbox{ #2}}}
+
+
+% Document
+\begin{document}
+
+\setcounter{chapter}{0}
+\chapter{ML Fundamentals}\label{ch:ml-fundamentals}
+\section{Feature Scaling}\label{sec:feature-scaling}
+\emph{Scale} the data to a fixed range \data{$[0, 1]$}.
+\emph{Min-Max Scaling}:
+\begin{equation}
+	x_{minmax} = \frac{x - x_{min}}{x_{max} - x_{min}}
+	\label{eq:min-max-scaling}
+\end{equation}
+
+\section{The Task, $T$}\label{sec:the-task}
+Tasks are usually described in terms of how the machine learning should process an example: \data{$x \in \mathbb{R}^{n}$} where each entry \data{$x_{i}$} is a \emph{feature}.
+\begin{description}[font=\color{emphblue}]
+	\item[Classification:] Learn \data{$f: \mathbb{R}^{n}\rightarrow\{1,\dots,k\}$}
+	\item[Regression:] Learn \data{$f: \mathbb{R}^{n} \rightarrow \mathbb{R}$}
+	\item[Transcription:] \emph{Unstructured representation} to \emph{discrete textual form}. Example: Optical character recognition, speech recognition.
+	\item[Machine translation:] Sequence to sequence. Example: Translate English to French.
+	\item[Synthesis and sampling:] \emph{Generate examples} that are \emph{similar} to those in the \emph{training data}. Example: Generate textures for video games, speech synthesis.
+\end{description}
+
+\subsection{Supervised Learning}\label{subsec:supervised-learning}
+\data{$y$} is real-valued $\rightarrow$ regression.
+\data{$y$} is categorical $\rightarrow$ classification.
+
+\section{Cross-Validation}\label{sec:cross-validation}
+\subsection{\data{$k$}-\emph{fold} cross-validation}\label{subsec:k-fold-cross-validation}
+Divide data into \data{$k$} \emph{folds}.
+Train on \data{$k-1$} \emph{folds}, use the \data{$k$th} to \emph{measure error}.
+Repeat \data{$k$} \emph{times}; use \emph{average error} to measure generalization accuracy.
+Statistically valid and gives good accuracy estimates.
+
+\subsection{\emph{Leave-one-out} cross validation (LOOCV)}\label{subsec:loocv}
+\data{$k$}-\emph{fold} cross validation with \data{$k=N$}, where \data{$N$} is the number of \emph{data points}.
+Quite accurate, but also \emph{expensive}, since it requires \emph{building} \data{$N$} \emph{models}.
+
+\section{AIC/BIC}\label{sec:aic/bic}
+\definition{\emph{Akaike Information Criterion} (AIC) and \emph{Bayesian Information Criterion} (BIC)}{compares different models to choose one that \emph{best fits the data}.}
+The goal of both AIC and BIC is to \emph{balance} the \emph{goodness-of-fit} of the model with its \emph{complexity}, in order to avoid overfitting or underfitting.
+Both \emph{AIC} and \emph{BIC} \emph{penalize models} with \emph{large number of parameters} relative to the \emph{size} of the \emph{data}, but BIC penalizes more severely.
+\begin{equation}
+	\begin{aligned}
+		\min AIC &= \min\left\{ 2m - 2\log(L) \right\}\\
+		\min BIC &= \min\left\{ m\log(n) - 2\log(L) \right\}
+	\end{aligned}\label{eq:aic-bic}
+\end{equation}
+where \data{$m$} is the \emph{number} of \emph{model parameters}, \data{$n$} is the \emph{number} of \emph{data points}, and \data{$L$} is the \emph{maximum likelihood} of the model.
+
+\chapter{SVMs}\label{ch:svms}
+\section{Perceptron Algorithm}\label{sec:perceptron-algorithm}
+Set time \data{$t=1$}, start with vector \data{$\vec{w}_{1}=\oldvec{0}$}.
+Given example \data{$\vec{x}$}, \emph{predict positive} iff (if and only if) \data{$\vec{w_{1}\cdot\vec{x} \geq 0}$}.
+On a mistake, update as follows:
+\emph{false positive}, then update \data{$\vec{w}_{t+1} \gets \vec{w}_{t} + \vec{x}$};
+\emph{false negative}, then update \data{$\vec{w}_{t+1} \gets \vec{w}_{t} - \vec{x}$}.
+
+%\section{Geometric Margin}\label{sec:geometric-margin}
+%The \emph{margin} of example $\data{\vec{x}}$ w.r.t a \emph{linear separator} \data{$\vec{w}$} is the distance from \data{$\vec{x}$} to the plane \data{$\vec{w}^{T} \cdot \vec{x} = 0$}.
+%The \emph{margin} \data{$\gamma$} of a set of examples $\data{S}$ w.r.t a \emph{linear separator} \data{$\vec{w}$} is the largest margin over points \data{$\vec{x}\in S$}.
+%Theorem: If the data has a \emph{margin} \data{$\gamma$} and all points lie inside a ball of \emph{radius} \data{$R$}, then the Perceptron algorithm makes \data{$\leq R/\gamma^{2}$} \emph{mistakes.}
+%
+%\section{Support Vector Machine}\label{sec:svm}
+%\emph{Support vector machines} (SVMs) are \emph{supervised max-margin} models with associated learning algorithms.
+%Good \emph{generalization} in theory.
+%Good \emph{generalization} in practice.
+%Work well with \emph{few training instances}.
+%Find \emph{globally best} model.
+%\emph{Efficient algorithms}.
+%Amenable to the \emph{kernel trick}.
+%
+%\section{Classification Margin}\label{sec:classification-margin}
+%Examples closest to the hyperplane are \emph{support vectors}.
+%Margin \data{$\rho$} of the separator is the \emph{distance between support vectors}.
+%
+%\section{Maximizing the Margin}\label{sec:maximizing-the-margin}
+%Better \emph{Generalization} -- A larger margin allows the SVM to \emph{better generalize} to new, unseen data, leading to \emph{higher predictive accuracy}.
+%Improved \emph{Robustness} -- A larger margin can lead to improved robustness \emph{against noise and outliers} in the training data, as it allows for \emph{greater tolerance} of misclassified examples.
+%Reducing \emph{Overfitting} -- A larger margin can help \emph{reduce overfitting} by creating a \emph{simpler decision boundary} that is less sensitive to small fluctuations in the training data.
+%Enhanced \emph{Interpretability} -- A larger margin can lead to clearer and more \emph{interpretable decision boundaries}, making it easier to understand the model's behavior.
+%
+%\section{Linear SVM}\label{sec:linear-svm}
+%Let training set \data{$\left\{ (\vec{x}_{i}, y_{i})_{i=1\dots{}n}\ , \vec{x}_{i}\in\mathbb{R}^{d}, y_{i} \in \{ -1, 1\} \right\}$} be separated by a hyperplane with margin \data{$\rho$}.
+%Then for each training example \data{$(\vec{x}_{i}, y_{i}) \Rightarrow y_{i}\left( \vec{w}^{T}\vec{x}_{i} + b \right) \geq 1$}
+%Geometrically, the \emph{distance} between the \emph{2 hyperplanes} can be expressed as:
+%\begin{equation}
+%	\rho = \frac{2}{||w||}
+%	\label{eq:hyperplane-distance}
+%\end{equation}
+%
+%\[ \data{\mbox{\emph{Minimize }} Q(w) = \frac{1}{2}||\vec{w}||^{2} = \frac{1}{2}\vec{w}^{T}\vec{w}} \mbox{ subject to } \data{y_{i}(\vec{w}^{T}\vec{x}_{i} + b) \geq 1,\ \ \forall i \in [1, n]} \]
+%
+%\section{Lagrangian Duality}\label{sec:lagrangian-duality}
+%\[ \mathcal{L} = -\frac{1}{2}\sum_{i}\sum_{j} \alpha_{i} \alpha_{j} y_{i} y_{j} \vec{x}_{i}^{T} \vec{x}_{j} + \sum_{i} \alpha_{i} \]
+%The \emph{new objective function} is in terms of \data{$a_{i}$} only.
+%The original problem is known as the primal problem.
+%The objective function of the \emph{dual} problem needs to be \emph{maximized}.
+%
+%\section{SVM Solution}\label{sec:svm-solution}
+%Given a \emph{solution} \data{$a_{1}\dots a_{n}$} to the dual problem, solution to the primal is:
+%\data{\[ \vec{w} = \sum a_{i}y_{i}\vec{x}\ \ \ b = y_{k} - \sum a_{i}y_{i}\vec{x}_{i}^{T}\vec{x}_{k} \mbox{ for any } a_{k} > 0  \]}
+%Each non-zero \data{$a_{i}$} indicates that corresponding \data{$\vec{x}_{i}$} is a \emph{support vector}.
+%Then the \emph{classifying function is:}
+%\[ \data{ f(x) = \sum a_{i}y_{i}\vec{x}_{i}^{T}\vec{x} + b } \]
+%Notice that it relies on the \emph{inner product} between the test point \data{$\vec{x}$} and the support vectors \data{$\vec{x}_{i}$}.
+%Solving the optimization problem involves \emph{computing the inner products} \data{$\vec{x}_{i}^{T}\vec{x}_{j}$} between all training points.
+%
+%\section{Soft Margin Classification}\label{sec:soft-margin-classification}
+%What if the training set is \emph{not linearly separable?}
+%\emph{Slack variables} \data{$\xi_{i}$} can be added to \emph{allow misclassification} of difficult or noisy examples; thus, the result margin is called \emph{soft}.
+%\data{$\forall (\vec{x}_{i}, y_{i})$}, find \data{$\vec{w}$} and \data{$b$} such that
+%\[ \mbox{\emph{Minimize} } \data{ Q(\vec{w}, \xi_{i}) = \frac{1}{2}\vec{w}^{T}\vec{w} + C\sum_{i=1}^{n}\xi_{i} } \]
+%subject to \data{$\xi_{i} \geq 0$} and \data{$y_{i}(\vec{w}^{T}\vec{x}_{i} + b) \geq 1 - \xi_{i},\ \ \forall i \in [1,n]$}.
+%
+%The \emph{tradeoff} between the \emph{maximization} of the \emph{margin} and \emph{minimization} of the \emph{classification error} is determined by the margin \emph{parameter} \data{$C$}.
+%\data{$\forall i$}, find \data{$\alpha_{1} \dots \alpha_{n}$} such that
+%\[ \mbox{\emph{Maximize} } \data{ Q(a) = \sum_{i}\alpha_{i} = \frac{1}{2}\sum_{i} \sum_{j} \alpha_{i} \alpha_{j} y_{i} y_{j} \vec{x}_{i}^{T} \vec{x}_{j} } \]
+%subject to \data{$0 \leq \alpha_{i} \leq C$} and \data{$\sum_{i} \alpha_{i} y_{i} = 0$}
+%The solution is:
+%\[ \data{ \vec{w} = \sum \alpha_{i} y_{i} \vec{x}_{i}\ \ \ \ b = y_{k}(1 - \xi_{i}) - \sum \alpha_{i} y_{i} \vec{x}_{i}^{T} \vec{x}_{k} \mbox{   for any } \alpha_{k} > 0 } \]
+%
+%\section{Kernel Method}\label{sec:kernel-method}
+%If we \emph{map} the \emph{input vectors} into a very \emph{high-dimensional feature space}, the task of \emph{finding} the \emph{maximum-margin separator} can become \emph{computationally intractable}.
+%All of the \emph{computations} that we need to do to find the \emph{maximum-margin separator} (SVM optimization problem) can be expressed in terms of \emph{inner products} between \emph{pairs of data points} (in the high-dimensional feature space).
+%These \emph{inner products} are the only part of the computation that depends on the dimensionality of the high-dimensional space.
+%So, if we had a \emph{fast way} to do the dot products, we would \emph{not have to pay a price} for solving the learning problem in the high-dimensional space.
+%The \emph{kernel trick} is just a way of \emph{doing inner products} a whole lot faster than is usually possible.
+%It relies on \emph{choosing a way of mapping} to the \emph{high-dimensional feature space} that allows fast scalar products.
+%By using a \emph{nonlinear vector function} \data{$\phi(x) = \left< \phi(\vec{x}_{1}), \dots, \phi(\vec{x}_{n}) \right>$}, the \data{$n$}-dimensional input vector \data{$\vec{x}$} can be mapped into high-dimensional feature space.
+%The \emph{decision function} in the feature space is expressed as:
+%\[ \data{ f(x) = \vec{w}^{T}\phi(\vec{x}) + b } \]
+%In terms of solving the \emph{quadratic optimization problem of SVM}, each training data point is in the form of dot products.
+%A \emph{kernel function} \data{$K$} simplifies the calculation of dot product terms \data{$\left< \phi(\vec{x}_{i}) \cdot \phi(\vec{x}_{j}) \right>$}.
+%\[ \data{K(\vec{x}_{i}, \vec{x}_{j}) = \phi(\vec{x}_{i})^{T} \phi(\vec{x}_{j})} \]
+%
+%\begin{table}[H]
+%	\centering
+%	\caption{Kernel Functions}
+%	\label{tab:kernel-fucntions}
+%	\begin{tabular}{|c|c|c|}
+%		\hline
+%		\textbf{Kernel Name} & \textbf{Category} & \textbf{Kernel Function}\\
+%		\hline
+%		Polynomial & Global & $K(\mu, v) = (\mu \cdot v + 1)^{d}$\\
+%		\hline
+%		Radial Basis Kernel (RBF) & Local & $K(\mu, v) = \exp( -\gamma || \mu - v ||^{2} )$\\
+%		\hline
+%	\end{tabular}
+%\end{table}
+%
+%\subsection{Local Kernels}\label{subsec:local-kernels}
+%Only \emph{nearby data points} affect SVM model.
+%Has \emph{higher learning} ability, but the \emph{generalization} ability is \emph{lower}.
+%Used when there is \emph{no prior knowledge} about the training dataset.
+%
+%\subsection{Global Kernels}\label{subsec:global-kernels}
+%\emph{Data points} from \emph{greater distance} can affect SVM\@.
+%Has a \emph{higher generalization ability}, but the \emph{learning} ability is \emph{lower}.
+%
+%\section{Kernel Trick}\label{sec:kernel-trick}
+%The linear classifier~\eqref{eq:linear-kernel} relies on the \emph{inner product} between vectors.
+%\[ \data{ K(\vec{x}_{i}, \vec{x}_{j}) = \vec{x}_{i}^{T}\vec{x}_{j} } \]
+%If \emph{every data point} is \emph{mapped} into \emph{high-dimensional space} via some transformation \data{$\mathbf{\phi}: x \rightarrow \phi(x)$}, the inner product becomes --
+%\[ \data{ K(\vec{x}_{i}, \vec{x}_{j}) = \phi(\vec{x}_{i})^{T}\phi(\vec{x}_{j}) } \]
+%A \emph{kernel function} is a function that is equivalent ot an inner product in some feature space.
+%As long as we can \emph{calculate the inner product in the feature space}, we do \emph{not} need to compute each \data{$\phi(x)$} explicitly.
+%This use of the \emph{kernel function} to \emph{avoid} computing \data{$\phi(x)$} explicitly is known as the \emph{kernel trick}.
+%
+%\section{Determining Kernels}\label{sec:determining-kernels}
+%For some \emph{functions} \data{$K(\vec{x}_{i}, \vec{x}_{j})$} checking that \data{$K(\vec{x}_{i}, \vec{x}_{j}) = \phi(\vec{x}_{i})^{T}\phi(\vec{x}_{j})$} can be cumbersome.
+%Mercer's theorem: \data{$K$} is a \emph{kernel} iff \data{$K$} is \emph{symmetric} i.e., \data{$K = K^{T}$} AND \data{$K$} is \emph{positive semi-definite} i.e., \data{$c^{T}Kc \geq 0$}, where \data{$c \in \mathbb{R}$} is a vector.
+%
+%\section{Non-linear SVMs}\label{sec:non-linear-svms}
+%\data{$\forall i$}, find \data{$\alpha_{1} \dots \alpha_{n}$} such that
+%\[ \mbox{\emph{Maximize} } Q(a) = \sum_{i}\alpha_{i} - \frac{1}{2} \sum_{i} \sum_{j} \alpha_{i} \alpha_{j} y_{i} y_{j} K(\vec{x}_{i}, \vec{x}_{j}) \]
+%subject to \data{$\alpha_{i} \geq 0$} and \data{$\sum_{i} \alpha_{i}y_{i} = 0$}.
+%
+%The solution is:
+%\begin{equation}
+%	f(\vec{x}) = \sum \alpha_{i} y_{i} K(\vec{x}_{i}, \vec{x}_{j}) + b
+%	\label{eq:non-linear-svms}
+%\end{equation}
+
+\section{Kernel Closure Properties}\label{sec:kernel-closure-properties}
+Easily \emph{create new kernels} using basic ones.
+If \data{$K_{1}(\cdot, \cdot)$} and \data{$K_{2}(\cdot, \cdot)$} are kernels and \data{$c_{1} \geq 0$}, \data{$c_{2} \geq 0$}, then --
+\data{$K = c_{1}K_{1} + c_{2}K_{2}$} is a kernel,
+\data{$K = K_{1}K_{2}$} is a kernel.
+
+\section{Kernel Benefits}\label{sec:kernel-benefits}
+Offers great \emph{modularity}.
+\emph{No need} to \emph{change} the \emph{underlying learning algorithm} to \emph{accommodate} a particular choice of kernel function.
+Can \emph{substitute} a \emph{different algorithm} while maintaining the \emph{same kernel}.
+
+\section{Conclusion}\label{sec:conclusion}
+Strengths:
+Fast.
+Training is relatively easy.
+It scales relatively well high dimensional data.
+Tradeoff between classifier complexity and error can be controlled explicitly.
+Non-traditional data like strings and trees can be used as input to SVM, instead of feature vectors.
+
+Weaknesses:
+Need to choose a ``good'' kernel function.
+
+\chapter{\Naive Bayes}\label{ch:naive-bayes}
+0 -- 1 loss: \data{$L(h(\vec{x}), y) = 1, h(\vec{x}) \neq y$ otherwise $L(h(\vec{x}), y) = 0$}\\
+$L_{2}$ Loss: \data{$L(h(\vec{x}), y) = \left( h(\vec{x}) - y \right)^{2}$}\\
+Hinge Loss: \data{$L(h(\vec{x}), y) = \max\{ 0, 1 - yh(\vec{x}) \}$}\\
+Exponential Loss: \data{$L(h(\vec{x}), y) = e^{-yh(\vec{x})} $}
+
+\begin{equation}
+	\begin{aligned}
+		P(E) &= \sum_{rows\ matching\ E}P(row)\\
+		P(E_{1}\ |\ E_{2}) &= \frac{E_{1} \land E_{2}}{P(E_{2})} = \frac{\sum_{\mbox{rows matching } E_{1} \mbox{ and } E_{2}}P(row)}{\sum_{\mbox{rows matching } E_{2}}P(row)}
+	\end{aligned}
+	\label{eq:evidence-based-probability}
+\end{equation}
+
+\section{Probability Distribution}\label{sec:probability-distribution}
+\subsection{Bernoulli Distribution}\label{subsec:bernoulli-distribution}
+Random Variable \data{$X$} takes values \data{$\{0, 1\}$} (flipping a coin) such that
+\[ \data{ P(X=1) = p = 1 - P(X=0) } \]
+
+\subsection{Binomial Distribution}\label{subsec:binomial-distribution}
+Random Variable \data{$X$} takes values \data{$\{ 1, 2, \dots, n\}$} representing the number of successes \data{$X=1$} in \data{$n$} Bernoulli trials (flipping a coin \data{$n$} times).
+\[ \data{ P(X = k) = f(n, p, k) = C_{n}^{k}p^{k}(1 - p)^{n-k} } \]
+
+\subsection{Categorical Distribution}\label{subsec:categorical-distribution}
+Random Variable \data{$X$} takes on values in \data{$\{ 1, 2, \dots, k \}$} such that (rolling a die)
+\[ \data{ P(X = i) = p_{i} } \mbox{ and } \data{ \sum_{1}^{k} p_{i} = 1 } \]
+
+\subsection{Multinomial Distribution}\label{subsec:multinomial-distribution}
+Let the random variables \data{$X_{i}(i = 1, 2, \dots, k)$} indicates the number of times outcome \data{$i$} was observed over the \data{$n$} trials (rolling a die \data{$n$} times).
+The vector $X=(X_{1}, X_{2}, \dots, X_{k})$ follows a multinomial distribution \data{$(n, p)$} where \data{$p = (p_{1}, p_{2}, \dots, p_{k})$} and \data{$\sum_{1}^{k} = 1$}
+\begin{equation*}
+\begin{aligned}[eqred]
+	f(x_{1}, x_{2}, \dots, x_{k}, n, p) &= P(X_{1} = x_{1}, X_{2} = x_{2}, \dots, X_{k} = x_{k})\\
+		= \frac{n!}{x_{1}! \times x_{2}! \times \dots \times x_{k}!} \times p_{1}^{x_{1}} \times p_{2}^{x_{2}} \times \dots \times p_{k}^{x_{k}} \mbox{ where } \sum_{i=1}^{k} x_{i} = n
+\end{aligned}
+\end{equation*}
+
+\section{Bayes' Rule}\label{sec:bayes'-rule}
+\begin{equation}
+	\begin{aligned}[eqred]
+		P(A|B) &= \frac{P(B|A)\times P(A)}{P(B)}\\
+	\end{aligned}
+	\label{eq:bayes-rule}
+\end{equation}
+
+\section{Maximum APosteriori Estimate}\label{sec:maximum-aposteriori-estimate}
+\begin{equation}
+	\begin{aligned}[eqred]
+		P(h|D) &= \frac{P(D|h)\times P(h)}{P(D)}\\
+		h_{MAP} &= \arg\max_{h\in H}P(h|D) = \arg\max_{h\in H}P(D|h)\times P(h)\\
+	\end{aligned}
+	\label{eq:map}
+\end{equation}
+
+\section{Maximum Likelihood Estimate}\label{sec:maximum-likelihood-estimate}
+Here we just \emph{look for} the \emph{hypothesis} that \emph{best explains} the \emph{data}
+
+\section{Na\:ive Bayes Classifier}\label{sec:naive-bayes-classifier}
+\begin{equation}
+	\begin{aligned}
+		Y_{NB} &= \arg\max_{y_{j} \in Y} P(y_{j})\prod_{i=1}^{n} P(x_{i} | y_{j})\\
+		P(x_{i} | y) &= \frac{\mbox{number of } x_{i} \mbox{ labeled as } y}{\mbox{ total number of label } y} = \frac{n_{i}}{n} = \frac{n_{i} + \alpha}{n + \alpha d}\end{aligned}
+	\label{eq:naive-bayes-classifier}
+\end{equation}
+where \data{$\alpha > 0$} is a smoothing parameter, \data{$d$} is the \emph{dimension} of the input.
+
+\section{Continuous Features}\label{sec:continuous-features}
+Assume \data{$P(x_{i} | y)$} has a \emph{Gaussian (normal) distribution}.
+It is a continuous distribution with probability density function:
+\begin{equation}
+	p(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(x - \mu)^{2}}{2\sigma^{2}}}
+	\label{eq:gaussian-distribution}
+\end{equation}
+\data{$\mu$} is the \emph{mean} of the distribution.
+\data{$\sigma^{2}$} is the \emph{variance} of the distribution.
+\data{$x$} is a \emph{continuous} variance \data{$(-\infty \leq x \leq \infty)$}
+
+\section{Training Bayesian Classifier}\label{sec:training-bayesian-classifier}
+During \emph{training}, typically \emph{log-space} is used.
+
+\begin{equation*}
+\begin{aligned}[eqred]
+	y_{NB} = \arg\max_{y} \left[ \log P(y) \prod_{i=1}^{n} P(x_{i} | y) \right] = \arg\max_{y} \left[ \log P(y) + \sum_{i=1}^{n} \log P(x_{i} | y) \right]\\
+\end{aligned}
+\end{equation*}
+
+%\section{Text Classification}\label{sec:text-classification}
+%\begin{algorithm}[H]
+%	\caption{Text-based Naïve Bayes Classification}\label{alg:train-naive-bayes}
+%	\begin{algorithmic}[1]
+%		\Function{Train-Naive-Bayes}{$D, C$} \Returns $\log P(c)$ and $\log P(w|c)$
+%		\ForAll{class $c\in C$}\Comment{Calculate $P(c)$ terms}
+%		\State $N_{doc} \gets$ number of documents in $D$
+%		\State $N_{c} \gets$ number of documents from $D$ in class $c$
+%		\State $logprior[c] \gets \log\frac{N_{c}}{N_{doc}}$
+%		\State $V \gets $ vocabulary of $D$
+%		\State $bigdoc[c] \gets \Call{Append}{d}$ \textbf{for} $d\in D$ \textbf{with} class $c$
+%		\ForAll{word $w$ in $V$}\Comment{Calculate $P(w|c)$ terms}
+%		\State $\Call{Count}{w,c}\gets $ \# of occurrences of $w$ in $bigdoc[c]$
+%		\State $loglikelihood[w, c]\gets \log \frac{\Call{Count}{w, c} + 1}{\sum_{w' \mbox{ in } V} (\Call{Count}{w', c} + |V|)} $
+%		\EndFor
+%		\EndFor
+%		\State \Return $logprior, loglikelihood, V$
+%		\EndFunction
+%	\end{algorithmic}
+%\end{algorithm}
+%\begin{algorithm}[H]
+%	\caption{Test \Naive Bayes}\label{alg:test-naive-bayes}
+%	\begin{algorithmic}[1]
+%		\Function{Test-Naive-Bayes}{$testdoc, logprior, loglikelihood, C, V$} \Returns best $c$
+%		\ForAll{class $c \in C$}
+%			\State $sum[c] \gets logprior[c]$
+%			\ForAll{position $i$ in $testdoc$}
+%				\State $word \gets testdoc[i]$
+%				\If{$word \in V$}
+%					\State $sum[c] \gets sum[c] + loglikelihood[word, c]$
+%				\EndIf
+%			\EndFor
+%		\EndFor
+%		\State \Return $\arg\max_{c}$, $sum[c]$
+%		\EndFunction
+%	\end{algorithmic}
+%\end{algorithm}
+
+\section{Evaluating Classifiers}\label{sec:evaluating-classifiers}
+\emph{Gold Label} is the \emph{correct} output \emph{class} label of an input.
+\emph{Confusion Matrix} is a table for \emph{visualizing} how a \emph{classifier performs} with respect to the gold labels, using two dimensions (system output and gold labels), and each cell labeling a set of possible outcomes.
+\emph{TP} and \emph{TN} are \emph{correctly classified} outputs belonging to the positive and negative class, respectively.
+\emph{FP} and \emph{FN} are \emph{incorrectly classified} outputs.
+\begin{equation}
+	\mathbf{Precision} = \frac{\mbox{true positives}}{\mbox{true positives } + \mbox{ false positives}}
+	\label{eq:precision}
+\end{equation}
+\begin{equation}
+	\mathbf{Recall} = \frac{\mbox{true positives}}{\mbox{true positives } + \mbox{ false negatives}}
+	\label{eq:recall}
+\end{equation}
+\begin{equation}
+	\mathbf{F-measure} = F_{\beta} = \frac{(\beta^{2} + 1)PR}{\beta^{2}P + R}\\
+	\label{eq:f-measure}
+\end{equation}
+
+\section{ROC Curve}\label{sec:roc-curve}
+The \emph{ROC curve} is the plot of the \emph{true positive rate (recall)} (TPR)~\eqref{eq:recall} against the \emph{false positive rate} (FPR).
+\begin{equation}
+	\mathbf{FPR} = \frac{\mbox{false positives}}{\mbox{false positives } + \mbox{ true negatives}}
+	\label{eq:fpr}
+\end{equation}
+
+\section{\Naive Bayes: Two Classes}\label{sec:naive-bayes:-two-classes}
+Take logarithm; we predict \data{$y=1$} iff
+\begin{equation*}
+	\begin{aligned}[eqpurple]
+		\log \frac{P(y_{j}=1)}{P(y_{j}=0)} + \sum_{i}\log \frac{1-p_{i}}{1-q_{i}} + \sum_{i}\left( \log\frac{p_{i}}{1-p_{i}} - \log\frac{q_{i}}{1-q_{i}} \right)x_{i} > 0
+	\end{aligned}
+\end{equation*}
+
+\chapter{Logistic Regression}\label{ch:logistic-regression}
+\section{Generative Classifiers}\label{sec:generative-classifiers}
+If we are \emph{distinguishing} cat from dog images using a \emph{Generative Classifier}, we \emph{build} a \emph{model} of what is in a \emph{cat image}.
+It knows about whiskers, ears, eyes and \emph{assigns a probability} to any image to determine how cat-like is that image?
+Similarly, \emph{build} a \emph{model} of what is in a \emph{dog image}.
+Now given a new image, run both models and see which one \emph{fits better}.
+
+\section{Discriminative Classifiers}\label{sec:discriminative-classifiers}
+If we are \emph{distinguishing} cat from dog images using a \emph{Discriminative Classifier}.
+Just try to \emph{distinguish} dogs from cats.
+Oh look, dogs have collars.
+Ignore everything else.
+
+\section{Generative vs Discriminative Classifiers}\label{sec:generative-vs-discriminative-classifiers}
+\emph{Generative Classifiers} (\hyperref[eq:mle]{\emph{\Naive Bayes}}) --
+Assume some functional form for \emph{conditional independence}.
+Estimate parameters of \data{$P(D|h)$}, \data{$P(h)$} directly from training data.
+Use Bayes' rule to calculate \data{$P(h|D)$}.
+Why not \emph{learn} \data{$P(h | D)$} or the decision boundary \emph{directly}?
+\emph{Discriminative Classifiers} (\hyperref[eq:map]{\emph{Logistic Regression}}) --
+Assume some functional form for \data{$P(h | D)$} or for the decision boundary.
+\emph{Estimate parameters} of \data{$P(h | D)$} \emph{directly} from training data.
+
+\section{Learning a Logistic Regression Classifier}\label{sec:learning-a-logisitc-regression-classifier}
+Given \data{$n$} \emph{input-output} pairs --
+1) A feature representation of the \emph{input}.
+For each \emph{input observation} \data{$x_{i}$}, a vector of \emph{features} \data{$[x_{1}, x_{2}, \dots, x_{d}]$}.
+2) A \emph{classification function} that computes \data{$y$}, the estimated class, via \data{$P(y|x)$}, using the \emph{sigmoid of softmax} functions.
+3) An objective function for learning, like \emph{cross-entropy loss}.
+4) An algorithm for optimizing the objective function, like \emph{stochastic gradient ascent/descent}.
+
+\section{Logistic Regression}\label{sec:logistic-regression}
+Logistic Regression \emph{assumes} the following function form for \data{$P(y|x)$}:
+\begin{equation*}
+	\begin{aligned}[eqpurple]
+		P(y=1|x) &= \frac{1}{1+e^{-\left( \sum_{i}w_{i}x_{i} + b \right)}}\\
+		\frac{P(y=1|x)}{P(y=0|x)} &= e^{\left( \sum_{i}w_{i}x_{i} + b \right)} > 1 \Rightarrow \sum_{i} w_{i}x_{i} + b > 0
+	\end{aligned}
+\end{equation*}
+Logistic Regression is a \emph{linear} classifier.
+Turning a probability into a classifier using the \emph{logistic function}:
+\[ \data{ y_{LR}\left\{ \begin{array}{clr}
+							1 & \mbox{ if } P(y=1|x) \geq 0.5 & \textcolor{black}{\leftarrow w_{i}x_{i} + b \geq 0}\\
+							0 & \mbox{otherwise} & \textcolor{black}{\leftarrow w_{i}x_{i} + b < 0}
+\end{array} \right. } \]
+
+\section{Training Logistic Regression}\label{sec:training-logistic-regression}
+We'll focus on \emph{binary classification}.
+We \emph{parameterize} \data{$(w_{i}, b)$} as \data{$\theta$}:
+\begin{equation*}
+	\begin{aligned}[eqpurple]
+		P(y_{i} = 0|x_{i},\theta) = \frac{1}{e^{\sum_{i} w_{i}x_{i} + b}+1}\\
+		P(y_{i} = 1|x_{i},\theta) = \frac{e^{\sum_{i} w_{i}x_{i} + b}}{e^{\sum_{i} w_{i}x_{i} + b}+1}\\
+		P(y_{i}|x_{i},\theta) = \frac{e^{y_{i}\sum_{i} w_{i}x_{i} + b}}{e^{\sum_{i} w_{i}x_{i} + b}+1}
+	\end{aligned}
+\end{equation*}
+How do we \emph{learn parameters} \data{$\theta$}?
+
+\section{Cross-Entropy Loss}\label{sec:cross-entropy-loss}
+We want to know \emph{how far} is the \emph{classifier output} \data{$\hat{y}$} from the \emph{true output} \data{$y$}.
+Let's call this difference \data{$L(\hat{y},y)$}.
+Since there are only \emph{2 discrete outcomes} (0 or 1), we can express the probability \data{$P(y|x)$} from our classifiers as:
+\data{\[ P(y|x) = \hat{y}^{y}\cdot (1-\hat{y})^{1-y} \]}
+Goal: \emph{maximize the probability} of the correct label \data{$P(y|x)$.}
+Maximize:
+\data{\begin{equation*}
+		  \begin{aligned}
+			  P(y|x) &= \hat{y}^{y}\cdot (1-\hat{y})^{1-y}\\
+			  \log(P(y|x)) &= \log\left( \hat{y}^{y}\cdot (1-\hat{y})^{1-y} \right)\\
+			  &= y\log(\hat{y})+ (1-y)\log(1-\hat{y})\\
+		  \end{aligned}
+\end{equation*}}
+We want to \emph{minimize} the \emph{cross-entropy loss}:
+\begin{equation*}
+	\begin{aligned}[eqpurple]
+		\min_{\theta} L_{CE}(\hat{y}, y) = \log\left( 1 + e^{\sum_{i} w_{i}x_{i} + b} \right) + y\left( \sum_{i} w_{i}x_{i} + b \right)\\
+	\end{aligned}
+\end{equation*}
+
+\section{Minimizing Cross-Entropy Loss \data{$\min_{\theta} L_{CE}(\hat{y}, y)$}}\label{sec:minimizing-cross-entropy-loss}
+\emph{Convex/Concave} functions have a \emph{global minimum/maxima}.
+\emph{Gradient Ascent/Descent} is used for finding the \emph{maximum/minimum} of a \emph{concave/convex} function.
+
+\section{Gradients}\label{sec:gradients}
+\emph{Gradient Ascent/Descent}: Find the gradient of the function at the current point and \emph{move} in the \emph{same/opposite direction}.
+
+\section{Gradient Descent for Logistic Regression}\label{sec:gradient-descent-for-logistic-regression}
+Let us represent $\hat{y}=f(x, \theta)$.
+Gradient:
+\begin{equation}[eqpurple]
+	\nabla_{\theta} L(f(x,\theta), y) = \left[ \frac{\partial L(f(x, \theta), y)}{\partial b} , \frac{\partial L(f(x, \theta), y)}{\partial w_{1}}, \frac{\partial L(f(x, \theta), y)}{\partial w_{2}}, \dots, \frac{\partial L(f(x, \theta), y)}{\partial w_{d}} \right]
+	\label{eq:gradient}
+\end{equation}
+Update Rule:
+\begin{equation}[eqpurple]
+	\begin{aligned}[eqpurple]
+		\Delta\theta &= \eta\cdot\nabla_{\theta}L(f(x,\theta), y)\\
+		\theta_{t+1} &= \theta_{t} - \eta\cdot\frac{\partial}{\partial (w,b)}L(f(x,\theta), y)
+	\end{aligned}
+	\label{eq:update-rule}
+\end{equation}
+Gradient descent algorithm will \emph{iterate} until \data{$\Delta\theta < \epsilon$}.
+
+\begin{equation*}
+	\begin{aligned}[eqpurple]
+		L_{CE}(f(x, \theta), y) &= \log\left( 1 + e^{\sum_{i} w_{i}x_{i} + b} \right) - y\left( \sum_{i}w_{i}x_{i} + b \right)\\
+		\theta_{t+1} &= \theta_{t} - \eta\cdot x_{i}\left[ \hat{P}(y = 1|x,\theta_{t}) - y \right]
+	\end{aligned}
+\end{equation*}
+
+\section{Learning Rate $(\eta)$}\label{sec:learning-rate}
+\emph{Large} \data{$\eta$} $\Rightarrow$ Fast convergence but larger residual error.
+Also, possible oscillations.
+\emph{Small} \data{$\eta$} $\Rightarrow$ Slow convergence but small residual error.
+
+\section{Batch Training}\label{sec:batch-training}
+Stochastic gradient descent is called \emph{stochastic} because it chooses a \emph{single random example} at a time, moving the weights to improve performance on that single example.
+This results in very choppy movements, so it's \emph{common} to \emph{compute} the \emph{gradient over batches} of training instances rather than a single instance.
+\emph{Training data: } \data{$\{ x_{i}, y_{i} \}_{i=i\dots n}$} where \data{$x_{i} = ( x_{i1},  x_{i2}, \dots,   x_{id} )$}, \data{$n$} is the total \emph{instances} in a \emph{batch} and \data{$d$} is the \emph{dimension} of an instance.
+\begin{equation}
+	\theta_{t+1} = \theta_{t} - \frac{\eta}{n} \times \sum_{i=1}^{n} xij \left[ \frac{1}{1 + e^{-\theta^{T}\vec{x}}} - y_{i} \right]
+	\label{eq:batch-training}
+\end{equation}
+
+\section{Regularization}\label{sec:regularization}
+Regularization is used to \emph{avoid overfitting}.
+The \emph{weights} for features will \emph{attempt} to perfectly \emph{fit} details of the training set, modeling even \emph{noisy data} that just accidentally correlate with the class.
+The problem is called \emph{overfitting}.
+A \emph{good model} should \emph{generalize well} from the training data to the \emph{unseen test set}, but a model that \emph{overfits} will have \emph{poor generalization}.
+To avoid overfitting, a new \emph{regularization term} \data{$R(\theta)$} is added to the loss function.
+\begin{equation}
+	\min_{\theta} L_{reg}(\hat{y}, y) = -\frac{1}{n} \sum_{i=1}^{n} \left[ y\log(\hat{y}) + (1 - y)\log(1 - \hat{y}) \right] + \lambda R(\theta)
+	\label{eq:regulatization}
+\end{equation}
+
+\section{L1 Regularization}\label{sec:l1-regularization}
+Uses the L1 norm (\emph{Manhattan distance}) of the weights.
+\begin{equation}[eqred]
+	R(\theta) = ||\theta||_{1} = \sum_{j=0}^{d} |\theta_{j}|
+\label{eq:l1-regulatization}
+\end{equation}
+
+\section{L2 Regularization}\label{sec:l2-regularization}
+L2 Regularization is also called \emph{Ridge Regularization}.
+Uses the square of the \emph{L2 (Euclidean) norm} of the weights.
+\begin{equation}
+	\min_{\theta} R(\theta) = ||\theta||_{2}^{2} = \sum_{j=0}^{d} \theta_{j}^{2}
+	\label{eq:l2-regulatization}
+\end{equation}
+
+\section{Training Phase}\label{sec:training-phase}
+\begin{equation*}
+	\begin{aligned}[eqpurple]
+		\theta_{t+1} = \theta_{t} - \frac{\eta}{n}\times \sum_{i=1}^{n} x_{ij}\left[ \frac{1}{1 + e^{-\theta^{T}\vec{x}}} - y_{i} \right]
+	\end{aligned}
+\end{equation*}
+
+1) Calculate the factor $-\theta^{T}\vec{x}$ for every example in the dataset.
+2) Calculate the factor $\sum_{i=1}^{n} x_{ij}\left[ \frac{1}{1 + e^{-\theta^{T}\vec{x}}} - y_{i} \right]$ for every example in the dataset, for every \data{$\theta$}
+3) Compute every \data{$\theta$}
+
+\section{Multinomial Logistic Regression}\label{sec:multinomial-logistic-regression}
+The \emph{loss function} for multinomial logistic regression \emph{generalizes} the loss function for binary logistic regression from \data{$2$} to \data{$K$} \emph{classes}.
+The \emph{true label} \data{$y$} is a vector with \data{$K$} elements, each corresponding to a class, with \data{$y_{c} = 1$} if the \emph{correct class} is \data{$c$}, with all \emph{other elements} of \data{$y$} being \data{$0$}.
+The \emph{classifier} will produce an \emph{estimate vector} with \data{$K$} elements \data{$\hat{y}$}, each element \data{$\hat{y}_{k}$} of which represents the estimated \emph{probability} \data{$P(y_{k} = 1 | x)$}.
+
+\begin{gather}
+	\Call{Softmax}{z_{i}} = \frac{\exp(z_{i})}{\sum_{j=1}^{K} \exp{z_{j}}}\ \ 1 \leq i \leq K\\
+	\label{eq:multinomial-softmax}
+	%
+	L_{CE}(\hat{y}, y) = -\sum_{k=1}^{K} y_{k} \log(\hat{y}_{k}) \\
+	\begin{aligned}
+		L_{CE}(\hat{y}, y) &= -\log(\hat{y}_{c})\\
+		&= -\log\left( \frac{e^{\sum_{i=1}^{d} w_{c}x_{i} + b_{c}}}{\sum_{j=1}^{K} e^{\sum_{i=1}^{d} w_{j}x_{i} + b_{j}}} \right)
+	\end{aligned}\\
+	\label{eq:multinomial-loss}
+	\frac{\partial L_{CE}}{\partial (w_{k}, b_{k})} = x_{i}\left[ \frac{e^{\sum_{i=1}^{d} w_{k}x_{i} + b_{k}}}{\sum_{j=1}^{K} e^{\sum_{i=1}^{d} w_{j}x_{i} + b_{j}}} - y_{k} \right]
+\end{gather}
+
+\chapter{Linear Regression}\label{ch:linear-regression}
+\section{Simplest Linear Regression}\label{sec:simplest-linear-regression}
+The \emph{regression model} is: \[ \data{ y = w_{1}x + w_{0} } \]
+Two parameters: the slope of the line \data{$w_{1}$}, the \data{$y$}-intercept \data{$w_{0}$}.
+
+\section{Linear Regression Function Model}\label{sec:linear-regression-function-model}
+\begin{equation*}
+	\begin{aligned}
+		f(x) &= w_{0} + w_{1}x_{1} + w_{2}x_{2} + \dots + w_{d}x_{d}
+		= w_{0} + \sum_{j=1}^{d} w_{j}x_{j}
+		= \vec{w}^{T}\vec{x}
+	\end{aligned}
+\end{equation*}
+\data{$w_{0}, w_{1}, \dots, w_{d}$} are the \emph{parameters} (weights) and \data{$\vec{x} = [1, x_{1}, x_{2}, \dots, x_{d}]$}
+
+
+\section{Error}\label{sec:error}
+\emph{Error} function measures how much our \emph{predictions deviate} from the \emph{desired answers}.
+Mean-squared error (MSE):
+\begin{equation}
+	\begin{aligned}
+		J_{n} &= \frac{1}{2n}\sum_{i=1}^{n} (y_{i} - f(\vec{x}_{i}))^{2}\\
+		&= \frac{1}{2n}\sum_{i=1}^{n} (y_{i} - \vec{w}^{T}\vec{x}_{i})^{2}\\
+	\end{aligned}
+	\label{eq:mse}
+\end{equation}
+Learning: We want to find the \emph{weights minimizing the error}.
+In~\eqref{eq:mse}, \data{$y_{i} - \vec{w}^{T}\vec{x}_{i}$} is the \emph{residual\label{dfn:residual}} and $\sum_{i=1}^{n} (y_{i} - \vec{w}^{T}\vec{x}_{i})^{2}$ is the \emph{residual sum of squares (RSS)}.
+
+\section{Optimization}\label{sec:optimization}
+For the optimal set of parameters, \emph{derivatives} of the \emph{error} with respect to each \emph{parameter} must be \data{$0$}.
+\begin{equation*}
+\begin{aligned}[eqred]
+\frac{\partial}{\partial w_{j}} J_{n}(\vec{w}) &= -\frac{1}{n} \sum_{i=1}^{n} (y_{i} - w_{0}x_{i0} - w_{1}x_{i1} - \dots - w_{d}x_{id})x_{ij} = 0
+\end{aligned}
+\end{equation*}
+Vector of derivatives:
+\begin{equation*}
+\begin{aligned}[eqred]
+	\nabla_{w}(J_{n}(\vec{w})) &= -\frac{1}{n} \sum_{i=1}^{n} \left( y_{i} - \vec{w}^{T}\vec{x}_{i} \right)\vec{x}_{i}= \oldvec{0}
+\end{aligned}
+\end{equation*}
+By rearranging the terms, we get a system of linear equations with \data{$d+1$} unknowns.
+\[ \data{ w_{0}\sum_{i=1}^{n} x_{i0}\cdot x_{ij} + \dots + w_{1}\sum_{i=1}^{n} x_{i1}\cdot x_{ij} + \dots + w_{d}\sum_{i=1}^{n} x_{id}\cdot x_{ij} + \sum_{i=1}^{n} y_{i}\cdot x_{ij} = \sum_{i=1}^{n} y_{i}\cdot x_{ij} } \]
+Can also be solved through matrix inversion if the matrix is not singular.
+\[ \data{ \vec{A}\vec{w} = \vec{b} \Rightarrow \vec{w} = \vec{A}^{-1}\vec{b} } \]
+
+\section{Linear Regression as a System of Linear Equations}\label{sec:linear-regression-as-a-system-of-linear-equations}
+The \emph{linear regression model} is akin to a \emph{system of linear equations}.
+Assuming \data{$n$} training examples with \data{$d+1$} \emph{features} each --
+\begin{equation*}
+	\begin{aligned}
+		\data{1^{\mbox{st}}} & \mbox{ training example:} & y_{1} = w_{0} + x_{11}w_{1} + x_{12}w_{2} + \dots + x_{1d}2_{d}\\
+		\data{2^{\mbox{nd}}} & \mbox{ training example:} & y_{2} = w_{0} + x_{21}w_{1} + x_{22}w_{2} + \dots + x_{2d}2_{d}\\
+		& \vdots & \\
+		\data{n^{\mbox{th}}} & \mbox{ training example:} & y_{n} = w_{0} + x_{n1}w_{1} + x_{n2}w_{2} + \dots + x_{nd}2_{n}\\
+	\end{aligned}
+\end{equation*}
+
+\section{Solving Linear Regression}\label{sec:solving-linear-regression}
+\subsection{Using Matrices}\label{subsec:using-matrices}
+\data{$J_{n}(\vec{w})$} can be rewritten in terms of data \emph{matrices} \data{$X$} and \emph{vectors}:
+\begin{equation*}
+	\begin{aligned}
+		J_{n}(\vec{w}) &= \frac{1}{2}(\vec{y} - \vec{X}\vec{w})^{T}(\vec{y} - \vec{X}\vec{w})\\
+		\nabla J_{n}(\vec{w}) &= -\vec{X}^{T}(\vec{y} - \vec{X}\vec{w})\\
+	\end{aligned}
+\end{equation*}
+Set \emph{derivatives} to \data{$0$} and solve to obtain \data{$\vec{w}$}.
+\begin{equation*}
+	\begin{aligned}[eqpurple]
+		J_{n}(\vec{w}) &= 0\\
+		-\vec{X}^{T}(\vec{y} - \vec{X}\vec{w}) &= 0\\
+		-\vec{X}^{T}\vec{y} + \vec{X}^{T}\vec{X}\vec{w} &= 0\\
+		\vec{X}^{T}\vec{X}\vec{w} &= \vec{X}^{T}\vec{y}\\
+		\vec{w} &= \left( \vec{X}^{T}\vec{X} \right)^{-1}\vec{X}^{T}\vec{y}\\
+	\end{aligned}
+\end{equation*}
+
+\subsection{Using Gradient Descent}\label{subsec:using-gradient-descent}
+Linear regression problem comes down to the problem of solving a set of linear equations:
+\begin{equation*}
+\begin{aligned}
+	\vec{w} &\gets \vec{w} - \eta\cdot\nabla_{\vec{w}} J_{n}(\vec{w})\\
+	\nabla J_{n}(\vec{w}) &= -\vec{X}^{T}(\vec{y} - \vec{X}\vec{w})\\
+	\vec{w} &\gets \vec{w} - \eta\cdot\vec{X}^{T}(\vec{X}\vec{w} - \vec{y})\\
+\end{aligned}
+\end{equation*}
+
+\section{Online Linear Regression}\label{sec:online-linear-regression}
+The \emph{error function} defined for the whole dataset for the linear regression is:
+\[ \data{ J_{n} = \frac{1}{2n}\sum_{i=1}^{n} (y_{i} - f(\vec{x}_{i}))^{2} } \]
+\emph{Online Gradient Descent}: use the \emph{most recent sample} at each iteration.
+Instead of MSE for all data points, it uses \emph{MSE} for an \emph{individual sample}.
+\begin{equation*}
+\begin{aligned}[eqred]
+	J_{online} &= Error_{i}(\vec{w})\\
+	&= \frac{1}{2} \left( y_{i} - f(\vec{x}_{i}) \right)^{2}\\
+	\vec{w} &\gets \vec{w} - \eta \cdot \nabla_{\vec{w}} Error_{i}(\vec{w})\\
+	\vec{w} &\gets \vec{w} - \eta \cdot (f(\vec{x}_{i}) - y_{i}) \cdot \vec{x}_{i}\\
+\end{aligned}
+\end{equation*}
+
+\section{Input Normalization}\label{sec:input-normalization}
+Makes the \emph{data} very roughly on the \emph{same scale}.
+Can make a huge difference in \emph{online learning}.
+\[ \data{ \vec{w} \gets \vec{w} - \eta \cdot (f(\vec{x}_{i}) - y_{i}) \cdot } \textcolor{blue}{\vec{x}_{i}} \]
+For \emph{inputs} with a \emph{large magnitude}, the \emph{change} in the \emph{weight} is \emph{huge}.
+\emph{Solution}: Make all inputs vary in the same range.
+\begin{equation}
+	\begin{aligned}
+		\bar{x}_{j} &= \frac{1}{n}\sum_{i=1}^{n} x_{ij}\\
+		\sigma_{j}^{2} &= \frac{1}{n-1} \sum_{i=1}^{n} (x_{ij} - \bar{x}_{j})^{2}
+	\end{aligned}
+	\label{eq:normalization}
+\end{equation}
+New output:
+\[ \data{ \tildehat{x_{ij}} = \frac{x_{ij} - \bar{x}_{j}}{\sigma_{j}} } \]
+
+\section{L1/L2 Regularization}\label{sec:l1/l2-regularization}
+Using \emph{\hyperref[sec:regularization]{L1/L2 Regularization}}, we can rewrite our loss function as:
+\begin{equation*}
+\begin{aligned}[eqred]
+	L_{lasso} &= \frac{1}{2n}\sum_{i=1}^{n} \left( y_{i} - f(\vec{w}^{T}\vec{x}_{i}) \right)^{2} + \lambda ||\vec{w}||_{1}\\
+	L_{ridge} &= \frac{1}{2n}\sum_{i=1}^{n} \left( y_{i} - f(\vec{w}^{T}\vec{x}_{i}) \right)^{2} + \lambda ||\vec{w}||_{2}^{2}\\
+\end{aligned}
+\end{equation*}
+
+\section{Other Ways to Control Overfitting}\label{sec:other-ways-to-control-overfitting}
+\begin{description}[font=\emph]
+	\item[Early-stopping]: stopping training when a monitored metric has stopped improving.
+	\item[Bagging]: learning multiple models in parallel and applying majority voting to choose final predictor.
+	\item[Dropout]: in each iteration, don't update some of the weights.
+	\item[Injecting noise] in the inputs.
+\end{description}
+
+\section{Bias-Variance Tradeoff}\label{sec:bias-variance-tradeoff}
+\emph{Bias} captures the \emph{inherent error} present in the model.
+The \emph{bias error} originates from \emph{erroneous assumption(s)} in the \emph{learning algorithms}.
+\emph{Bias} is the \emph{contrast} between the \emph{mean prediction} of our model and the \emph{correct prediction}.
+\emph{Variance} captures how much the \emph{model changes} if it is \emph{trained} on a \emph{different training set}.
+\emph{Variance} is the variation or spread of \emph{model prediction} values across \emph{different data samples}.
+\emph{Underfitting} happens when a \emph{model is unable to capture} the underlying \emph{pattern} of the data.
+Such models usually have \emph{high bias} and \emph{low variance.}
+It usually happens when there is much fewer amount of \emph{data} to build an accurate model or when a \emph{linear model} is used to \emph{learn non-linear data}.
+\emph{Overfitting} happens when our \emph{model captures the noise} along with the underlying pattern in \emph{data}.
+It usually happens when the \emph{model} is \emph{trained} a lot over a \emph{noisy dataset}.
+These models have \emph{low bias} and \emph{high variance}.
+
+Bias:
+\begin{equation}
+(y - \hat{y})
+	\label{eq:bias}
+\end{equation}
+
+Variance:
+\begin{equation}
+	\frac{1}{k-1} \sum_{j=1}^{k-1} \left( \hat{y}_{j} - \hat{y} \right)^{2}
+	\label{eq:variance}
+\end{equation}
+
+Total Error:
+\begin{equation}
+	TE = Bias^{2} + Variance = (y - \hat{y})^{2} + \frac{1}{k-1} \sum_{j=1}^{k-1} \left( \hat{y}_{j} - \hat{y} \right)^{2}
+	\label{eq:total-error}
+\end{equation}
+
+\[ \data{ \mbox{ Expected Loss = Total Error = Bias}^{2} + \mbox{Variance } } \]
+
+\section{Fitting the Data}\label{sec:fitting-the-data}
+\data{$R^{2}$} is a \emph{metric} to determine how well does the \emph{learned model fit the data}, because simply having a low MSE does not guarantee that the model is not overfitting.
+\data{$R^{2}$} captures the \emph{fraction} of the \emph{total variance explained} by the model.
+Let \data{$\hat{y}_{i}$} be a predicted value, and \data{$\bar{y}$} be the sample mean.
+\begin{equation}
+	\begin{aligned}
+		R^{2} &= 1 - \frac{\mbox{Residual Variance}}{\mbox{Total Variance}}\\
+		&= 1 - \frac{\sum (y_{i} - \hat{y}_{i})^{2}}{\sum (y_{i} - \bar{y}_{i})^{2}}
+	\end{aligned}
+	\label{eq:r2}
+\end{equation}
+
+\section{Alternative Loss Functions}\label{sec:alternative-loss-functions}
+\begin{description}
+	\item[Square loss] Very commonly used for regression. Leads to an easy-to-solve optimization problem.
+	\begin{equation}
+		\left( y_{n} - f(\vec{x}_{n}) \right)^{2}
+		\label{eq:quared-loss}
+	\end{equation}
+	\item[Absolute loss] Grows more slowly than squared loss. Better suited when data has some outliers (inputs on which model makes large errors).
+	\begin{equation}
+		| y_{n} - f(\vec{x}_{n}) |
+		\label{eq:absolute-loss}
+	\end{equation}
+	\item[Huber loss] Squared loss for small errors (up to \data{$\delta$}); absolute loss for larger errors. Good for data with outliers. % FIXME: No equation given for Huber loss
+	\item[$\epsilon$-insensitive loss (Vapnik loss)] Zero loss for small errors (say up to \data{$\epsilon$}); absolute loss for larger errors.
+	\begin{equation}
+		| y_{n} - f(\vec{x}_{n}) | - \epsilon
+		\label{eq:loss}
+	\end{equation}
+\end{description}
+
+%\section{Extensions of Linear Model}\label{sec:extensions-of-linear-model}
+%\begin{equation*}
+%	\begin{aligned}
+%		f(\vec{x}) &= w_{0} + w_{1}\phi_{1}(\vec{x}) + w_{2}\phi_{2}(\vec{x}) + \dots + w_{m}\phi_{m}(\vec{x})\\
+%		&= w_{0} + \sum_{j=1}^{m} w_{j}\phi_{j}(\vec{x})
+%	\end{aligned}
+%\end{equation*}
+%\data{$\phi_{1}(\vec{x}), \phi_{2}(\vec{x}), \dots, \phi_{m}(\vec{x})$} are the \emph{basis functions}.
+
+\end{document}

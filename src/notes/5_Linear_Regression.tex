@@ -6,7 +6,6 @@
 	number={5},
 	title={Linear Regression}
 ]{cs584notes}
-%\usepackage{pas-tableur}
 
 % Document
 \begin{document}
@@ -18,7 +17,7 @@
 \end{itemize}
 
 \section{Examples}\label{sec:examples}
-Predicting a continuous outcome variable
+Predicting a \emph{continuous} outcome variable
 \begin{itemize}
 	\item Predicting a company's future stock price using its profit and other financial information.
 	\item Predicting \emph{annual rainfall} based on local flora and fauna.
@@ -49,14 +48,24 @@ Predicting a continuous outcome variable
 Function \data{$f: X\rightarrow Y$} is a linear combination of input components
 \begin{equation*}
 \begin{aligned}
-	f(x) &= w_{0} + w_{1}x_{1} + w_{2}x_{2} + \dots + w_{d}x_{d} = w_{0} + \sum_{j=1}^{d} w_{j}x_{j}
+	f(x) &= w_{0} + w_{1}x_{1} + w_{2}x_{2} + \dots + w_{d}x_{d}\\
+		 &= w_{0} + \sum_{j=1}^{d} w_{j}x_{j}
+\end{aligned}
+\end{equation*}
+\data{$w_{0}, w_{1}, \dots, w_{d}$} are the \emph{parameters} (weights)
+
+Input vector: \data{$\vec{x} = [1, x_{1}, x_{2}, \dots, x_{d}]$}
+\begin{equation*}
+\begin{aligned}
+	f(x) &= w_{0}x_{0} + w_{1}x_{1} + w_{2}x_{2} + \dots + w_{d}x_{d}\\
+		 &= \vec{w}^{T}\vec{x}
 \end{aligned}
 \end{equation*}
 \data{$w_{0}, w_{1}, \dots, w_{d}$} are the \emph{parameters} (weights)
 
 \section{Error}\label{sec:error}
 \begin{itemize}
-	\item \emph{Error} function measures how much our predictions deviate from the \emph{desired answers}.
+	\item \emph{Error} function measures how much our \emph{predictions deviate} from the \emph{desired answers}.
 	\item Mean-squared error (MSE):
 	\data{\begin{equation}
 		\begin{aligned}
@@ -66,7 +75,7 @@ Function \data{$f: X\rightarrow Y$} is a linear combination of input components
 		\label{eq:mse}
 	\end{equation}}
 	\item Learning: We want to find the \emph{weights minimizing the error}.
-	\item In~\eqref{eq:mse}, \data{$y_{i} - \vec{w}^{T}\vec{x}_{i}$} is the \emph{residual\label{dfn:residual}} and $\dots$.
+	\item In~\eqref{eq:mse}, \data{$y_{i} - \vec{w}^{T}\vec{x}_{i}$} is the \emph{residual\label{dfn:residual}} and $\sum_{i=1}^{n} (y_{i} - \vec{w}^{T}\vec{x}_{i})^{2}$ is the \emph{residual sum of squares (RSS)}.
 \end{itemize}
 
 \section{Optimization}\label{sec:optimization}
@@ -81,12 +90,12 @@ Function \data{$f: X\rightarrow Y$} is a linear combination of input components
 	\item Vector of derivatives:
 	\data{\begin{equation*}
 	\begin{aligned}
-		\nabla_{w} &= -\frac{1}{n} \sum_{i=1}^{n} \left( y_{i} - \vec{w}^{T}\vec{x}_{i} \right)\vec{x}_{i}\\
+		\nabla_{w}(J_{n}(\vec{w})) &= -\frac{1}{n} \sum_{i=1}^{n} \left( y_{i} - \vec{w}^{T}\vec{x}_{i} \right)\vec{x}_{i}\\
 				   &= \vec{0}
 	\end{aligned}
 	\end{equation*}}
 	\item By rearranging the terms, we get a system of linear equations with \data{$d+1$} unknowns.
-	\[ \data{ w_{0}\sum_{i=1}^{n} x_{i0}\cdot x_{ij} + w_{1}\sum_{i=1}^{n} x_{i1}\cdot x_{ij} + \dots + w_{d}\sum_{i=1}^{n} x_{id}\cdot x_{ij} + \sum_{i=1}^{n} y_{i}\cdot x_{ij} } \]
+	\[ \data{ w_{0}\sum_{i=1}^{n} x_{i0}\cdot x_{ij} + \dots + w_{1}\sum_{i=1}^{n} x_{i1}\cdot x_{ij} + \dots + w_{d}\sum_{i=1}^{n} x_{id}\cdot x_{ij} + \sum_{i=1}^{n} y_{i}\cdot x_{ij} = \sum_{i=1}^{n} y_{i}\cdot x_{ij} } \]
 	\item Can also be solved through matrix inversion if the matrix is not singular.
 	\[ \data{ \vec{A}\vec{w} = \vec{b} \Rightarrow \vec{w} = \vec{A}^{-1}\vec{b} } \]
 \end{itemize}
@@ -109,7 +118,18 @@ Assuming \data{$n$} training examples with \data{$d+1$} \emph{features} each --
 	\item \data{$J_{n}(\vec{w})$} can be rewritten in terms of data \emph{matrices} \data{$X$} and \emph{vectors}:
 	\begin{equation*}
 	\begin{aligned}
-		J_{n}(\vec{w}) &= \frac{1}{2}(\dots)
+		J_{n}(\vec{w}) &= \frac{1}{2}(\vec{y} - \vec{X}\vec{w})^{T}(\vec{y} - \vec{X}\vec{w})\\
+		\nabla J_{n}(\vec{w}) &= -\vec{X}^{T}(\vec{y} - \vec{X}\vec{w})\\
+	\end{aligned}
+	\end{equation*}
+	\item Set \emph{derivatives} to \data{$0$} and solve to obtain \data{$\vec{w}$}.
+	\begin{equation*}
+	\begin{aligned}[eqpurple]
+		J_{n}(\vec{w}) &= 0\\
+		-\vec{X}^{T}(\vec{y} - \vec{X}\vec{w}) &= 0\\
+		-\vec{X}^{T}\vec{y} + \vec{X}^{T}\vec{X}\vec{w} &= 0\\
+		\vec{X}^{T}\vec{X}\vec{w} &= \vec{X}^{T}\vec{y}\\
+		\vec{w} &= \left( \vec{X}^{T}\vec{X} \right)^{-1}\vec{X}^{T}\vec{y}\\
 	\end{aligned}
 	\end{equation*}
 \end{itemize}
@@ -126,7 +146,7 @@ Assuming \data{$n$} training examples with \data{$d+1$} \emph{features} each --
 	\end{equation*}}
 \end{itemize}
 
-\section{Linear Regression}\label{sec:linear-regression}
+\section{Online Linear Regression}\label{sec:online-linear-regression}
 \begin{itemize}
 	\item The \emph{error function} defined for the whole dataset for the linear regression is:
 	\[ \data{ J_{n} = \frac{1}{2n}\sum_{i=1}^{n} (y_{i} - f(\vec{x}_{i}))^{2} } \]
@@ -136,7 +156,8 @@ Assuming \data{$n$} training examples with \data{$d+1$} \emph{features} each --
 	\begin{aligned}
 		J_{online} &= Error_{i}(\vec{w})\\
 				   &= \frac{1}{2} \left( y_{i} - f(\vec{x}_{i}) \right)^{2}\\
-		\vec{w} \gets \vec{w} - \eta\dots
+		\vec{w} &\gets \vec{w} - \eta \cdot \nabla_{\vec{w}} Error_{i}(\vec{w})\\
+		\vec{w} &\gets \vec{w} - \eta \cdot (f(\vec{x}_{i}) - y_{i}) \cdot \vec{x}_{i}\\
 	\end{aligned}
 	\end{equation*}}
 \end{itemize}
@@ -145,14 +166,22 @@ Assuming \data{$n$} training examples with \data{$d+1$} \emph{features} each --
 \begin{itemize}
 	\item Makes the \emph{data} very roughly on the \emph{same scale}.
 	\item Can make a huge difference in \emph{online learning}.
+	\[ \data{ \vec{w} \gets \vec{w} - \eta \cdot (f(\vec{x}_{i}) - y_{i}) \cdot } \textcolor{blue}{\vec{x}_{i}} \]
 	\item For \emph{inputs} with a \emph{large magnitude}, the \emph{change} in the \emph{weight} is \emph{huge}.
 	\item \emph{Solution}: Make all inputs vary in the same range.
+	\begin{equation}
+		\begin{aligned}
+			\bar{x}_{j} &= \frac{1}{n}\sum_{i=1}^{n} x_{ij}\\
+			\sigma_{j}^{2} &= \frac{1}{n-1} \sum_{i=1}^{n} (x_{ij} - \bar{x}_{j})^{2}
+		\end{aligned}
+		\label{eq:normalization}
+	\end{equation}
 	\item New output:
-	\[ \data{ \hat{x_{ij}} = \frac{x_{ij} - \bar{x}_{j}}{\sigma_{j}} } \] % TODO: Make the hat on the x a ~
+	\[ \data{ \tildehat{x_{ij}} = \frac{x_{ij} - \bar{x}_{j}}{\sigma_{j}} } \]
 \end{itemize}
 
 \section{L1/L2 Regularization}\label{sec:l1/l2-regularization}
-Using \emph{L1/L2 Regularization}, we can rewrite our loss function as:
+Using \emph{\hyperref[sec:regularization]{L1/L2 Regularization}}, we can rewrite our loss function as:
 \data{\begin{equation*}
 \begin{aligned}
 	L_{lasso} &= \frac{1}{2n}\sum_{i=1}^{n} \left( y_{i} - f(\vec{w}^{T}\vec{x}_{i}) \right)^{2} + \lambda ||\vec{w}||_{1}\\
@@ -162,7 +191,7 @@ Using \emph{L1/L2 Regularization}, we can rewrite our loss function as:
 
 \section{Other Ways to Control Overfitting}\label{sec:other-ways-to-control-overfitting}
 \begin{description}[font=\emph]
-	\item[Early-stopping]: stopping training when a monitored matrix has stopped improving.
+	\item[Early-stopping]: stopping training when a monitored metric has stopped improving.
 	\item[Bagging]: learning multiple models in parallel and applying majority voting to choose final predictor.
 	\item[Dropout]: in each iteration, don't update some of the weights.
 	\item[Injecting noise] in the inputs.
@@ -175,11 +204,12 @@ Using \emph{L1/L2 Regularization}, we can rewrite our loss function as:
 	\item \emph{Bias} is the \emph{contrast} between the \emph{mean prediction} of our model and the \emph{correct prediction}.
 	\item \emph{Variance} captures how much the \emph{model changes} if it is \emph{trained} on a \emph{different training set}.
 	\item \emph{Variance} is the variation or spread of \emph{model prediction} values across \emph{different data samples}.
-	\item \emph{Underfitting} happens when a \emph{model unable to capture} the underlying \emph{pattern} of the data.
+	\item \emph{Underfitting} happens when a \emph{model is unable to capture} the underlying \emph{pattern} of the data.
 	Such models usually have \emph{high bias} and \emph{low variance.}
 	\item It usually happens when there is much fewer amount of \emph{data} to build an accurate model or when a \emph{linear model} is used to \emph{learn non-linear data}.
 	\item \emph{Overfitting} happens when our \emph{model captures the noise} along with the underlying pattern in \emph{data}.
-	\item $\dots$
+	\item It usually happens when the \emph{model} is \emph{trained} a lot over a \emph{noisy dataset}.
+	\item These models have \emph{low bias} and \emph{high variance}.
 \end{itemize}
 
 Bias:
@@ -201,5 +231,63 @@ Total Error:
 \end{equation}
 
 \[ \data{ \mbox{ Expected Loss = Total Error = Bias}^{2} + \mbox{Variance } } \]
+
+\section{Fitting the Data}\label{sec:fitting-the-data}
+\begin{itemize}
+	\item \data{$R^{2}$} is a \emph{metric} to determine how well does the \emph{learned model fit the data}, because simply having a low MSE does not guarantee that the model is not overfitting.
+	\item \data{$R^{2}$} captures the \emph{fraction} of the \emph{total variance explained} by the model.
+	\item Let \data{$\hat{y}_{i}$} be a predicted value, and \data{$\bar{y}$} be the sample mean.
+	\begin{equation}
+		\begin{aligned}
+			R^{2} &= 1 - \frac{\mbox{Residual Variance}}{\mbox{Total Variance}}\\
+				  &= 1 - \frac{\sum (y_{i} - \hat{y}_{i})^{2}}{\sum (y_{i} - \bar{y}_{i})^{2}}
+		\end{aligned}
+		\label{eq:r2}
+	\end{equation}
+\end{itemize}
+
+\section{Alternative Loss Functions}\label{sec:alternative-loss-functions}
+\begin{description}
+	\item[Square loss] Very commonly used for regression. Leads to an easy-to-solve optimization problem.
+	\begin{equation}
+		\left( y_{n} - f(\vec{x}_{n}) \right)^{2}
+		\label{eq:quared-loss}
+	\end{equation}
+	\item[Absolute loss] Grows more slowly than squared loss. Better suited when data has some outliers (inputs on which model makes large errors).
+	\begin{equation}
+		| y_{n} - f(\vec{x}_{n}) |
+		\label{eq:absolute-loss}
+	\end{equation}
+	\item[Huber loss] Squared loss for small errors (up to \data{$\delta$}); absolute loss for larger errors. Good for data with outliers. % FIXME: No equation given for Huber loss
+	\item[$\epsilon$-insensitive loss (Vapnik loss)] Zero loss for small errors (say up to \data{$\epsilon$}); absolute loss for larger errors.
+	\begin{equation}
+		| y_{n} - f(\vec{x}_{n}) | - \epsilon
+		\label{eq:loss}
+	\end{equation}
+\end{description}
+
+\section{Extensions of Linear Model}\label{sec:extensions-of-linear-model}
+\begin{equation*}
+\begin{aligned}
+	f(\vec{x}) &= w_{0} + w_{1}\phi_{1}(\vec{x}) + w_{2}\phi_{2}(\vec{x}) + \dots + w_{m}\phi_{m}(\vec{x})\\
+			   &= w_{0} + \sum_{j=1}^{m} w_{j}\phi_{j}(\vec{x})
+\end{aligned}
+\end{equation*}
+\data{$\phi_{1}(\vec{x}), \phi_{2}(\vec{x}), \dots, \phi_{m}(\vec{x})$} are the \emph{basis functions}.
+
+% TODO: Add the training / test phase
+
+\section{Conclusion}\label{sec:conclusion-5}
+Strengths:
+\begin{itemize}
+	\item Simple to implement.
+	\item Easy to implement.
+\end{itemize}
+
+Weaknesses:
+\begin{itemize}
+	\item Assumes a linear relationship between variables.
+	\item Susceptible to outliers.
+\end{itemize}
 
 \end{document}

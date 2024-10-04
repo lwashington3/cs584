@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/styles/tex/latex/cs584" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/styles/tex/latex/cs584notes" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/styles/tex/latex/iitacademics" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/styles/tex/latex/cs584exam" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/auxil" />
       <excludeFolder url="file://$MODULE_DIR$/out" />
     </content>
