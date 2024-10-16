@@ -1,0 +1,166 @@
+%! Author = Len Washington III
+%! Date = 10/9/24
+
+% Preamble
+\documentclass[
+	number={7},
+	title={Principal Component Analysis}
+]{cs584notes}
+
+% Document
+\begin{document}
+
+\section{Introduction}\label{sec:introduction}
+\begin{itemize}
+	\item PCA is a \emph{linear dimensionality reduction} technique that can be used to \emph{simplify} a \emph{dataset} by \emph{reducing} the number of \emph{dimensions in the data.}
+	\item It is a \emph{linear transformation} that \emph{chooses} a new coordinate system for the dataset such that --
+	\begin{itemize}
+		\item The \emph{greatest variance} by any \emph{projection} of the dataset lies on the \emph{first axis} (this is called the \emph{first prinicipal component $PC_{1}$}).
+		\item The \emph{second greatest variance} is on the second axis \emph{$PC_{2}$} and so.
+	\end{itemize}
+	\item PCA can be used for \emph{reducing dimensionality} by eliminating the \emph{later principal components}
+\end{itemize}
+
+\section{Benefits}\label{sec:benefits}
+\begin{itemize}
+	\item \emph{Large datasets} can be \emph{summarized} into smaller ones that can be easier to analyze and visualize.
+	\item Easy to calculate and compute.
+	\item \emph{Identify correlations} between data points.
+	\item Can be used in \emph{exploratory data analysis},
+	\item \emph{Prevents} predictive algorithms from data \emph{overfitting} issues.
+\end{itemize}
+
+\section{PCA Algorithm}\label{sec:pca-algorithm}
+\begin{itemize}
+	\item Given the \emph{inputs} \data{$x_{i} \in \mathbb{R}^{d}$}, normalize the data points.
+	\item Compute the \data{$d\times d$} \emph{covariance matrix} \data{$S$} using the normalized-data matrix \data{$\vec{X}_{n\times d}$}
+	\item $\dots$
+	\item From the \data{$k\in K$} \emph{eigenvalues}, pick \data{$\lambda_{1} > \lambda_{2} > \dots > \lambda_k$}, and its associated \emph{eigenvectors} \data{$\{v_{1}, v_{2}, \dots, v_{k}\}$}.
+	\data{$v_{1}$} is \emph{$\mbox{PC}_{1}$}, \data{$v_{2}$} is \emph{$\mbox{PC}_{2}$}, \dots, \data{$v_{k}$} is \emph{$\mbox{PC}_{k}$},
+	\item The \data{$k$}-dimensional \emph{projection} of each \emph{input} is \data{$\vec{z}_{i} = \vec{v}_{k}^{T}\vec{x}_{i}$} where \data{$\vec{v}_{k}$} are the \emph{principal components}.
+	\item Larger \data{$\lambda$} implies \emph{higher principal component}.
+	\item \emph{PC} captures the \emph{greatest variance} of the \emph{projection}.
+	\item Maximizing the \emph{greatest variance} of the \emph{projection} $\dots$
+\end{itemize}
+
+\section{PCA via Variance Maximization}\label{sec:pca-via-variance-maximization}
+\begin{itemize}
+	\item Consider \emph{projecting} the \emph{inputs} \data{$\vec{x}_{i} \in \mathbb{R}^{d}$} along \emph{directions} \data{$\vec{v}_{k}$}.
+	\item Projection of \data{$\vec{x}_{i}$} (\textcolor{red}{red points}) will be \data{$\vec{v}_{1}^{T}\vec{x}_{i}$} (textcolor{green}{green points}).
+	\item \emph{Mean} of the projections of all the inputs:
+	\begin{equation*}
+	\begin{aligned}[eqpurple]
+		\frac{1}{n} \sum_{i=1}^{n} \vec{v}_{k}\dots
+	\end{aligned}
+	\end{equation*}
+	\item Construct a \emph{Lagrangian} for this optimization problem:
+	\begin{equation*}
+	\begin{aligned}[eqpurple]
+		\mathcal{L} &= \vec{v}_{k}^{T}\vec{S}\vec{v}_{k} + \lambda_{k}( 1 - \vec{v}_{k}^{T}\vec{v}_{k})\\
+		\frac{\partial L}{\partial \vec{v}_{k}} &= 0\\
+		&= 2\left( \vec{S}\vec{v}_{k} - \vec{\lambda}_{k}\vec{v}_{k} \right)\\
+		&= \vec{S}\vec{v}_{k} - \vec{\lambda}_{k}\vec{v}_{k} \\
+		\vec{S}\vec{v}_{k} &= \vec{\lambda}_{k}\vec{v}_{k} \\
+	\end{aligned}
+	\end{equation*}
+	\item \data{$v_{k}$} are \emph{eigenvectors} of the \emph{covariance matrix} \data{$\vec{S}$} with \emph{eigenvalues} \data{$\lambda_{k}$}.
+	\item Thus, \emph{variance} \data{$\vec{v}_{k}^{T}\vec{S}\vec{v}_{k}$} will be \emph{maximum} for the \emph{largest value} of \data{$\lambda_{k}$}, since:
+	\begin{equation*}
+	\begin{aligned}[eqpurple]
+		\vec{v}_{k}^{T}\vec{S}\vec{v}_{k} &= \vec{v}_{k}^{T}\lambda_{k}\vec{v}_{k}\\
+		&= \lambda_{k}\vec{v}_{k}^{T}\vec{v}_{k}\\
+		&= \lambda_{k}\\
+	\end{aligned}
+	\end{equation*}
+	\item If \data{$\lambda_{1}$} is the \emph{largest eigenvalue}, then \data{$\vec{v}_{1}$} is the corresponding \emph{eigenvector}, also known as the \emph{first principal component}.
+\end{itemize}
+
+\section{PCA via Minimizing Reconstruction Error}\label{sec:pca-via-minimizing-reconstruction-error}
+\begin{equation}
+	\arg_{\vec{v}_{k}}\max \frac{1}{n}
+	\label{eq:pca-reconstruction-error}
+\end{equation}
+
+\section{PCA via Single Value Decomposition}\label{sec:pca-via-single-value-decomposition}
+Any \emph{matrix} \data{$\vec{X}_{n\times d}$} can have a \emph{SVD} such that \data{$\vec{X}_{n\times d} = \vec{U}_{n\times n}\Lambda_{n\times d}\vec{V}_{d\times d}^{T}$}
+\begin{itemize}
+	\item \data{$\vec{U}$} is a matrix of \emph{left singular vectors} i.e., \emph{columns} of \data{$\vec{U}$} are eigenvectors of \data{$\vec{X}\vec{X}^{T}$}.
+	\item \data{$\vec{V}$} is a matrix of \emph{right singular vectors} i.e., \emph{columns} of \data{$\vec{V}$} are eigenvectors of \data{$\vec{X}^{T}\vec{X}$}.
+	\item \data{$\vec{\Lambda}$} is a \emph{diagonal matrix} of \emph{singular values}, where the \emph{squares of the diagonal elements} are the \emph{eigenvalues} of \data{$\vec{X}\vec{X}^{T}$} and \data{$\vec{X}^{T}\vec{X}$}.
+	\item \data{$\vec{U}$} and \data{$\vec{V}$} are \emph{orthonormal} i.e., every \emph{vector} (columns in matrix) have a \emph{magnitude} of \data{$1$} and are \emph{mutually orthogonal} i.e., their \emph{dot product} is \data{$0$}.
+\end{itemize}
+
+Recall, if \data{$\vec{X}$} is the \emph{normalized-data matrix}, then the \emph{covariance matrix} is:
+\begin{equation*}
+\begin{aligned}[eqpurple]
+	\vec{S} &= \frac{1}{n}\vec{X}^{T}\vec{X}\\
+	&= \frac{1}{n}\left( \vec{U}\vec{\Lambda}\vec{V}^{T} \right)^{T}\left( \vec{U}\vec{\Lambda}\vec{V}^{T} \right)\\
+	&= \frac{1}{n} \vec{V} \vec{\Lambda} \vec{U}^{T} \vec{U} \vec{\Lambda} \vec{V}^{T}\\
+	&= \frac{1}{n} \vec{V} \vec{\Lambda}^{2} \vec{V}^{T}\\
+	\vec{S}\vec{V} &= \frac{1}{n} \vec{V} \vec{\Lambda}^{2} \vec{V}^{T}\vec{V}\\
+	\vec{S}\vec{V} &= \frac{1}{n} \vec{V} \vec{\Lambda}^{2}\\
+	\vec{S}\vec{V} &= \frac{1}{n} \vec{\Lambda}^{2}\vec{V}\\
+\end{aligned}
+\end{equation*}
+where \data{$\vec{V}$} is the eigenvector and \data{$\frac{1}{n}\vec{\Lambda}^{2}$} is the eigenvalue.
+
+\section{PCA Example}\label{sec:pca-example}
+Let a dataset of \emph{5 samples} with \emph{3-dimensional data} be
+\begin{table}[H]
+	\centering
+	\caption{PCA Example Data}
+	\label{tab:pca-example}
+	\begin{tabular}{ccc}
+		$A$ & $B$ & $C$\\
+		\hline
+	\end{tabular}
+\end{table}
+
+Compute the \emph{covariance matrix} \data{$S$}:
+\[ \data{S} = \left[ \begin{array}{ccc}
+	1 & \frac{673}{1000} & \frac{433}{500}\\
+	\frac{673}{1000} & 1 & \frac{97}{250}\\
+	\frac{433}{500} & \frac{97}{250} & 1
+\end{array} \right] \]
+
+\emph{Eigen decomposition} of \data{$\vec{S}$} generates eigenpairs:
+\begin{equation*}
+\begin{aligned}
+	\lambda_{1} &= 2.304 \ \ & \ \ \lambda_{2} &= 0.628 \ \ & \ \ \lambda_{3} &= 0.068\\
+	\vec{v}_{1} &= \left[ \begin{array}{c}
+		1.115\\
+		\\
+		\dots
+	\end{array} \right] \ \ & \ \ 	\vec{v}_{2} &= \left[ \begin{array}{c}
+		\\
+		\\
+		\dots
+	\end{array} \right] \ \ & \ \ 	\vec{v}_{3} &= \left[ \begin{array}{c}
+		\\
+		\\
+		\dots
+	\end{array} \right]
+\end{aligned}
+\end{equation*}
+
+\section{Linear PCA}\label{sec:linear-pca}
+\begin{itemize}
+	\item \emph{PCA} excels in \emph{linear data transformations} but can \emph{falter} with complex, \emph{non-linear datasets}.
+	\item Non-linear PCA:
+	\begin{itemize}
+		\item Kernel PCA
+		\item Autoencoder
+	\end{itemize}
+\end{itemize}
+
+\section{Kernel PCA}\label{sec:kernel-pca}
+\begin{itemize}
+	\item \emph{Replace} \data{$\vec{X}$} with \data{$\Phi(\vec{X})$} where \data{$\Phi(\cdot)$} is a \hyperref[sec:kernel-method]{\emph{kernel function.}}
+	\item All \emph{other operations stay the same} as linear PCA\@.
+	\item For \emph{eigen decomposition} technique,
+\end{itemize}
+
+\section{Autoencoder}\label{sec:autoencoder}
+
+
+\end{document}
