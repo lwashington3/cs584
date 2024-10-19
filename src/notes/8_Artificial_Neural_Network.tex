@@ -1,0 +1,136 @@
+%! Author = Len Washington III
+%! Date = 10/16/24
+
+% Preamble
+\documentclass[
+	number={8},
+	title={Artificial Neural Network}
+]{cs584notes}
+
+% Document
+\begin{document}
+
+\section{ANN Properties}\label{sec:ann-properties}
+\begin{itemize}
+	\item ANN is much like a \emph{black-box}.
+	\item Many \emph{neuron-like} threshold \emph{switching} units.
+	\item Many \emph{weighted interconnections} amount units.
+	\item Highly \emph{parallel} and \emph{distributed} process.
+\end{itemize}
+
+\section{Perceptron}\label{sec:perceptron}
+Linear function: \data{$f: X \rightarrow Y$}
+\begin{equation*}
+\begin{aligned}
+	f(\vec{x}) &= w_{0} + w_{1}x_{1} + w_{2}x_{2} + \dots + w_{d}x_{d}\\
+	&= w_{0} + \sum_{j=1}^{d} w_{j}x_{j}
+\end{aligned}
+\end{equation*}
+\data{$w_{0}, w_{1}, \dots, w_{d}$} are weights
+
+\section{Multi-layer Perceptron}\label{sec:multi-layer-perceptron}
+\begin{itemize}
+	\item Multi-layer perceptrons (MLPs) were designed to \emph{overcome} the \emph{computational limitation} of a single threshold element (\emph{perceptron}).
+	\item The idea is to \emph{stack several layers} of threshold elements, each layer using the output of the previous layer as input.
+	\item A \emph{feed-forward MLP} network defines a mapping:
+	\[\data{ y = f(x; \theta) }\]
+	\item \emph{Functions} are composed in a \emph{chain}:
+	\[\data{ f(x) = f_{3}(f_{2}(f_{1}(x))) }\]
+	\item \emph{Input layer}: The process starts with the input layer, which receives the input data.
+	Each \emph{neuron} in this \emph{layer} represents a \emph{feature} of \emph{input data}.
+	\item \emph{Weights and Biases}: \emph{Connections} between \emph{neurons} have associated \emph{weights}, which are \emph{learned} during the training process and is crucial to capture patterns in the data.
+	\item \emph{Hidden Layers}: The neurons in these layers perform computations on the inputs.
+	The \emph{output} of each \emph{neuron} is calculated by applying a \emph{weighted sum of its inputs} (from the previous layer).
+	\item \emph{Activation Functions}: The activation function is crucial as it introduces \emph{non-linearity} into the model, allowing it to \emph{learn} more \emph{complex} functions. $\dots$
+\end{itemize}
+
+\section{Activation Functions}\label{sec:activation-functions}
+\begin{itemize}
+	\item \emph{Non-linearity}: This is the most fundamental property; activation functions introduce nonlinearity into the network.
+	This is important because \emph{real-world relationships and patterns} are rarely linear.
+	\item $\dots$
+	\item \emph{Monotonicity}: A monotonic activation function either \emph{strictly increases} or \emph{strictly decreases} as \emph{input values change}.
+	This property ensures that as inputs change, the \emph{neuron's output} moves in a \emph{consistent direction}.
+	\item \emph{Continuity}: A continuous activation function produces \emph{smooth and continuous changes} in output as inputs change slightly.
+	This property helps in \emph{smooth gradient computations} for \emph{updating weights} during the \emph{learning process}.
+	\item \emph{Differentiability}: Differentiability is essential for \emph{gradient-based optimization} algorithms like backpropagation.
+	\emph{Activation functions} that are \emph{differentiable} across their domain allow \emph{gradients} to be computed for \emph{weight updates} during training.
+	\item \emph{Sparsity}: Some activation functions promote sparsity by having their \emph{outputs} be \emph{zero} for a large portion of input space.
+	This can be beneficial in \emph{reducing} the \emph{complexity} of neural networks.
+\end{itemize}
+Rectified Linear Units (ReLU):
+\begin{equation}
+	\begin{aligned}
+		g(x) &= \max\{0, x\}\\
+		g'(x) &= \left\{ \begin{array}{cl}
+			1, & x \geq 0\\
+			0, & x < 0
+		\end{array} \right.
+	\end{aligned}
+	\label{eq:relu}
+\end{equation}
+
+Sigmoid:
+\begin{equation}
+	\begin{aligned}
+		g(x) &= \frac{1}{1 + e^{-x}}\\
+		g'(x) &= g(x)\left( 1 - g(x) \right)
+	\end{aligned}
+	\label{eq:sigmoid}
+\end{equation}
+
+Hyperbolic tangent $\tanh$
+\begin{equation}
+	\begin{aligned}
+		g(x) &= \frac{e^{x} - e^{-x}}{e^{x} + e^{-x}}\\
+		g'(x) &= 1 - g(x)^{2}
+	\end{aligned}
+	\label{eq:tanh}
+\end{equation}
+
+\begin{table}[H]
+	\centering
+	\caption{Activation Functions}
+	\label{tab:activation-functions}
+	\begin{tabular}{l l l l}
+		\textbf{Activation Functions} & \textbf{Sigmoid} & \textbf{tanh} & \textbf{ReLU}\\
+		Range & $(0, 1)$ & $(-1, 1)$ & $[0, \infty)$ \\
+		Vanishing Gradient Problem & Yes & Yes & No\\
+		Nature & Non-Linear & Non-Linear & Linear\\
+		Zero Centered Activation Function & No & Yes & No\\
+		Symmetric Function & No & Yes & No
+	\end{tabular}
+\end{table}
+
+\section{Feed-forward MLP}\label{sec:feed-forward-mlp}
+\begin{itemize}
+	\item The \emph{weights} of the \emph{neural network connections} are \emph{repeatedly adjusted} to \emph{minimize} the \emph{difference} between the \emph{actual output} and \emph{desired output}.
+	\item Aims to \emph{minimize} the \emph{loss function} by \emph{adjusting} the \emph{network's weights and biases}.
+	The \emph{loss function gradients} determine the level of adjustment with respect to parameters like activation function, weights, bias, etc.
+	\item The \emph{forward step}, given the input, \emph{computers} the \emph{output layer-by-layer}, starting with the \emph{input layer}.
+	\item The \emph{backward} step \emph{calculates} the \emph{error} in the output and \emph{propagates} it \emph{backwards}; then \emph{update} the \emph{weights layer-by-layer}, starting from the output layer.
+\end{itemize}
+
+\section{Forward Pass}\label{sec:forward-pass}
+\begin{itemize}
+	\item In this example, we will be using a \emph{three-layer neural network} with the layers being the input, hidden, and output layers.
+	\item The \emph{activation} $\dots$
+\end{itemize}
+
+\section{Gradient Descent}\label{sec:gradient-descent-review}
+\begin{itemize}
+	\item Goal of NN: Given \data{$n$} training samples \data{$(x_{i}, y_{i})$}, find \data{$w$} to \emph{minimize}:
+	\begin{equation}
+		E[w] = \frac{1}{2n} \sum_{i=1}^{n} (y_{i} - o_{i})^{2}
+		\label{eq:gradient-descent-review}
+	\end{equation}
+	\item $\dots$
+\end{itemize}
+
+\section{Chain Rule}\label{sec:chain-rule}
+\begin{itemize}
+	\item \data{$\frac{\partial z}{\partial x} = \frac{\partial z}{\partial y}\frac{\partial y}{\partial x}$}
+	\item \data{$\frac{\partial z}{\partial x} = \frac{\partial z}{\partial y_{1}}\frac{\partial y_{1}}{\partial x} + \frac{\partial z}{\partial y_{2}}\frac{\partial y_{2}}{\partial x}$}
+\end{itemize}
+
+\end{document}
