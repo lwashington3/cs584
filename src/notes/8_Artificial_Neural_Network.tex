@@ -133,4 +133,110 @@ Hyperbolic tangent $\tanh$
 	\item \data{$\frac{\partial z}{\partial x} = \frac{\partial z}{\partial y_{1}}\frac{\partial y_{1}}{\partial x} + \frac{\partial z}{\partial y_{2}}\frac{\partial y_{2}}{\partial x}$}
 \end{itemize}
 
+\section{Backward Pass}\label{sec:backward-pass}
+\begin{itemize}
+	\item Function 1 (\emph{error}):
+	\begin{equation*}
+	\begin{aligned}
+		\frac{\partial E_{h}}{\partial o_{h}} &= -(y_{h} - o_{h})\\
+		&= o_{h} - y_{h}
+	\end{aligned}
+	\end{equation*}
+	\item Function 2 (\emph{differentiable activation function}):
+	\begin{equation*}
+	\begin{aligned}
+		\frac{\partial o_{h}}{\partial net_{h}} &= \frac{e^{-net_{h}}}{\left( 1 + e^{-net_{h}} \right)^{2}}\\
+		&= \frac{1}{1 + e^{-net_{h}}} \times \left( 1 - \frac{1}{1 + e^{-net_{h}}} \right)\\
+		&= o_{h}(1 - o_{h})
+	\end{aligned}
+	\end{equation*}
+	\item Function 3 (\emph{linear} gate):
+	\begin{equation*}
+	\begin{aligned}
+		\frac{\partial net_{h}}{\partial w_{jh}} = x_{j}
+	\end{aligned}
+	\end{equation*}
+\end{itemize}
+
+Output neuron backpropagation error:
+\begin{equation}
+	\begin{aligned}
+		\delta_{1}^{y} &= \frac{\partial E_{1}}{\partial o_{1}^{y}}\frac{\partial o_{1}^{y}}{\partial net_{1}}\\
+		&= (o_{1}^{y} - y_{1})o_{1}^{y}(1 - o_{1}^{y})
+	\end{aligned}
+	\label{eq:output-backprop-error}
+\end{equation}
+
+Hidden neuron backpropagation error:
+\begin{equation}
+	\begin{aligned}
+		\delta_{1}^{h_{2}} &= \delta_{1}^{h_{2}}(1 - o_{1}^{h_{2}}) \sum_{m=1}^{3} \delta_{m}^{y}w_{h\frac{1}{2}y_{m}}
+	\end{aligned}
+	\label{eq:hidden-backprop-error}
+\end{equation}
+
+Weight updates:
+\begin{equation*}
+\begin{aligned}
+	w_{h\frac{1}{2}y_{1}} &= w_{h\frac{1}{2}y_{1}} - \eta \delta_{1}^{y} o_{1}^{h_{2}}\\
+	w_{h\frac{1}{1}h\frac{1}{2}} &= w_{h\frac{1}{1}\frac{1}{2}} - \eta \delta_{1}^{h_{2}} o_{1}^{h_{1}}\\
+\end{aligned}
+\end{equation*}
+
+\section{Backpropagation using Sigmoid}\label{sec:backpropagation-using-sigmoid}
+Repeat for each training example until end of training epoch:
+\begin{enumerate}
+	\item In the forward pass, compute the \emph{outputs} \data{$o$} of each neuron
+	\begin{enumerate}
+		\item The outputs for the \emph{input layer neurons} stay unchanged.
+		\item The outputs for the \emph{hidden} and \emph{output layer neurons} are computed using the \emph{sigmoid} activation function.
+	\end{enumerate}
+	\item In the \emph{backward pass}, \emph{propagate} the \emph{errors} \data{$\delta$} from \emph{output layer}
+	\begin{enumerate}
+		\item For each \emph{output} neuron \data{$k: \delta_{k} = (o_{k} - y_{k})o_{k}(1 - o_{K})$}
+		\item For each \emph{hidden} neuron: \data{$h: \delta_{h} = o_{h}(1 - o_{h}) \sum_{m=1}^{|h'|} \delta_{m}w_{hm}$}, where \data{$h'$} is the \emph{subsequent layer}.
+	\end{enumerate}
+	\item Update every \emph{weights} \data{$w_{ij} \gets w_{ij} - \eta\delta_{j} o_{i}$} where \data{$w_{ij}$} denotes the \emph{weight} between \emph{nodes} \data{$i$} and \data{$j$}.
+\end{enumerate}
+
+\section{Backpropagation Example}\label{sec:backpropagation-example}
+\begin{itemize}
+	\item \data{$x$} are the \emph{inputs}, \data{$h$} are the \emph{neurons} with \emph{sigmoid activation}, \data{$y$} are the \emph{outputs}.
+	\item The \emph{initial weights} of all the layers are shown in the figure.
+	\item Our objective is to learn $\dots$ \data{$\eta=1$}.
+\end{itemize}
+
+\section{Backpropagation with Batch Gradient Descent}\label{sec:backpropagation-with-batch-gradient-descent}
+\begin{itemize}
+	\item The \emph{backpropagation} algorithm we covered so far, as well as the example we practiced, both \emph{used stochastic gradient descent} for weight updates i.e., the \emph{weights} are \emph{updated} for \emph{every training instances}.
+	\item In \emph{backpropagation} using bgd, the \emph{weights} are \emph{updated} $\dots$
+\end{itemize}
+
+\section{Training}\label{sec:training}
+\emph{Backpropagation} is a gradient estimation method used to train NNs --
+\begin{itemize}
+	\item \emph{No guarantee} of \emph{convergence} since NNs form \emph{non-convex functions} with \emph{multiple local minima}.
+	\item \emph{Many epochs} (tens of thousands) may be needed for adequate training.
+	\item \emph{Large data sets} may require many hours of CPU\@.
+	\item \emph{Termination criteria}: Number of epochs, threshold on training set error, early stopping, increased error on validation set.
+	\item
+	\item \emph{Underfitting} --
+	\begin{itemize}
+		\item Using \emph{too few} hidden neurons in the NN\@.
+		\item \emph{Inadequate} or less \emph{data} to train the NN on.
+	\end{itemize}
+	\item \emph{Overfitting} --
+	\begin{itemize}
+		\item Training the NN over \emph{too manu epochs}.
+		\item Using \emph{too many hidden layers} in the NN\@.
+		\item Using \emph{too many neurons} in a hidden layer in the NN\@.
+	\end{itemize}
+\end{itemize}
+
+\section{Dropout}\label{sec:dropout}
+\begin{itemize}
+	\item \emph{Large weights} in NN are a sign or a more \emph{complex network} that has overfit the training data.
+	\item Probabilistically \emph{dropping out nodes} in the network is a simple and effective regularization method.
+\end{itemize}
+
 \end{document}
