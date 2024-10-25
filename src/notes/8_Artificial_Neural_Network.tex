@@ -239,4 +239,26 @@ Repeat for each training example until end of training epoch:
 	\item Probabilistically \emph{dropping out nodes} in the network is a simple and effective regularization method.
 \end{itemize}
 
+\section{Exploding Gradient Problem}\label{sec:exploding-gradient-problem}
+
+\section{Dying ReLU Problem}\label{sec:dying-relu-problem}
+\begin{itemize}
+	\item A \emph{dying RELU} always \emph{outputs} the same value i.e., \data{$0$} on any input value.
+	\item This condition is known as the \emph{dead state} of the ReLU \emph{neurons}.
+	\item In this state, it is \emph{difficult to recover} because the \emph{gradient} of \data{$0$} is \data{$0$}.
+	\item This becomes a problem when most of the \emph{input ranges} are \emph{negative}, or the \emph{derivative} of the \emph{ReLU function} is \data{$0$}.
+	\item Can be caused by a \emph{high learning rate} or a \emph{large negative bias.}
+	\item Using \emph{Leaky ReLU} instead can resolve the dying ReLU problem.
+	\begin{equation}
+		\begin{aligned}
+			g(x) &= \max\{ 0.01x, x\}\\
+			g'(x) &= \left\{ \begin{array}{ll}
+				1, & x \geq 0\\
+				0.01, & x < 0\\
+			\end{array} \right.
+		\end{aligned}
+		\label{eq:leaky-relu}
+	\end{equation}
+\end{itemize}
+
 \end{document}

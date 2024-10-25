@@ -1,0 +1,87 @@
+%! Author = Len Washington III
+%! Date = 10/25/24
+
+% Preamble
+\documentclass[
+	number={9},
+	title={Convolutional Neural Network}
+]{cs584notes}
+
+% Document
+\begin{document}
+
+\section{How do computers see?}\label{sec:how-do-computers-see?}
+
+\section{Computer Vision}\label{sec:computer-vision}
+
+\subsection{Grayscale Model}\label{subsec:grayscale-model}
+\begin{itemize}
+	\item Images contain \emph{pixels} with just \emph{one value}.
+	\item Can be represented using a \emph{2-D array}.
+	\item \emph{0}: black, \emph{255}: white, \emph{1--254}: shades of gray.
+\end{itemize}
+
+\subsection{\textcolor{red}{R}\textcolor{green}{G}\textcolor{blue}{B} Color Model}\label{subsec:rgb-color-model}
+\begin{itemize}
+	\item Each \emph{color} channel is \emph{stored} in \emph{8 bits}.
+	\item \emph{8 bits} can store \emph{256 values} (0--255).
+	\item Also known as \emph{24-bit color} ($8 \times 3$).
+\end{itemize}
+
+\section{Image Classification}\label{sec:image-classification}
+\begin{itemize}
+	\item Can we \emph{directly} take an \emph{image} and \emph{feed} it to a regular fully-connected \emph{neural network}?
+	\begin{itemize}
+		\item Yes, we can, but we will need to first \emph{flatten} the \emph{2-D image array}.
+	\end{itemize}
+	\item Issues:
+	\begin{itemize}
+		\item No spatial information.
+		\item Too many parameters.
+	\end{itemize}
+	\item Solution:
+	\begin{itemize}
+		\item Exploit \emph{spatial structure}.
+		\item \emph{Each neuron} in the hidden layer \emph{only respond} to a certain \emph{set of neurons} in the previous layer.
+		\item \emph{Connect} the \emph{patch} in \emph{input layer} to a \emph{single neuron} in the subsequent layer.
+		\item Use a \emph{sliding window} to define all possible \emph{connections}.
+		\item \emph{Weighting} the \emph{connection} between the patches and the next layer will allow uss to \emph{learn the features}.
+	\end{itemize}
+\end{itemize}
+
+\section{Convolutional Neural Network}\label{sec:convolutional-neural-network}
+\begin{itemize}
+	\item \emph{CNN} or \emph{ConvNet} is a specialized kind of neural network for \emph{processing data} that has a known \emph{grid-like topology}.
+	\begin{itemize}
+		\item \emph{Image} data, which can be thought of as a \emph{2-D grid of pixels}.
+		\item \emph{Time-series} data, which can be thought of as a \emph{1-D grid taking samples at regular time intervals}
+	\end{itemize}
+	\item $\dots$
+	\item \emph{Convolutional layer} performs a \emph{transformation} called \emph{convolution}, a specialized king of \emph{linear operation} on its input.
+	\item In CNN, \emph{convolution replaces} general \emph{matrix multiplication} in their convolution layers.
+	\item CNN is \emph{specialized} for \emph{pattern detection}.
+	\item \emph{Convolutional layer specifies} the \emph{number of filter kernels} each layer must have, and these \emph{filters} are used to \emph{detect patterns}.
+	\item Each layer in a convolutional neural network has a \emph{3-D lattice structure}.
+	\item Three types of \emph{transformations} between layers:
+	\begin{description}[font=\emph]
+		\item[Convolution] Apply filters to \emph{generate feature maps}.
+		\item[Activation function] To introduce \emph{nonlinearity}.
+		\item[Pooling] \emph{Downsampling} operation on each feature map.
+	\end{description}
+	\item CNN performs these \emph{transformations repeatedly}:
+	\begin{itemize}
+		\item \emph{Higher-order feature} detectors after convolution.
+		\item \emph{Lower spatial resolution} after pooling.
+	\end{itemize}
+	\item In the \emph{first stage}, the layer performs \emph{several convolutions} in \emph{parallel} to produce a \emph{set of linear activations}.
+	\item In the \emph{second stage}, each linear activation is run through a \emph{nonlinear activation function}, such as ReLU\@.
+	This stage is called the \emph{detector stage}.
+	\item In the \emph{third stage}, a \emph{pooling function} is used to \emph{modify} the output of the layer further.
+	A pooling function \emph{replaces} the \emph{output} of the \emph{network} at a certain location with a \emph{summary statistic} of the nearby outputs:
+	\begin{itemize}
+		\item The \emph{max pooling} operation reports the \emph{maximum output} within a \emph{rectangular neighboorhood}.
+		\item Other pooling strategies include \emph{average pooling}, \emph{weighted average pooling}, \emph{L2 norm}, etc.
+	\end{itemize}
+\end{itemize}
+
+\end{document}
