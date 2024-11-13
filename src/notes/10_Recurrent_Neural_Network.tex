@@ -1,0 +1,197 @@
+%! Author = Len Washington III
+%! Date = 11/6/24
+
+% Preamble
+\documentclass[
+	number={10},
+	title={Recurrent Neural Networks}
+]{cs584notes}
+
+% Document
+\begin{document}
+
+\section{Motivation}\label{sec:motivation}
+\begin{itemize}
+	\item When the model generates ``people'', we need a way to \emph{tell the model} that \emph{``several''} has \emph{already been generated} and similarly for the other words.
+\end{itemize}
+
+\section{Neurons with Recurrent}\label{sec:neurons-with-recurrent}
+\begin{equation}
+	y^{t} = f(x^{t}, h^{t-1})\\
+	\label{eq:recurrence}
+\end{equation}
+
+\section{Recurrent Neural Network}\label{sec:recurrent-neural-network}
+\begin{itemize}
+	\item Apply a \emph{recurrence relation} at every \emph{time step} \data{$t$} to \emph{process} a \emph{sequence}.
+	\item The \emph{feedback connection} allows \emph{information} to \emph{persist}.
+	\item \emph{RNNs} have \emph{hidden state} \data{$h^{t}$} $\dots$.
+\end{itemize}
+
+\section{RNN Implementation}\label{sec:rnn-implementation}
+\begin{itemize}
+	\item $\dots$
+	\item \emph{Loop} through all \emph{individual words} in the sentence.
+	\item Inside the loop, each \emph{word} is \emph{fed} into \emph{RNN} model along with \emph{previous hidden state}.
+	\item This \emph{generates} $\dots$
+	\item \emph{Prediction} for the \emph{final word} is the \emph{RNN's output} after all the \emph{prior work} have been \emph{fed} in \emph{through} the \emph{model}.
+\end{itemize}
+
+\section{Unrolling the RNN}\label{sec:unrolling-the-rnn}
+\begin{equation}
+	\begin{aligned}
+		h^{t} &= g(w_{xh}x^{t} + w_{hh}h^{t-1})\\
+		y^{t} &= g(w_{hy}h^{t})
+	\end{aligned}
+	\label{eq:hidden}
+\end{equation}
+
+\begin{equation}
+	L = \sum_{t=0}^{k} L^{t}
+	\label{eq:rnn-loss}
+\end{equation}
+
+\section{Sequence Modeling}\label{sec:sequence-modeling}
+\begin{itemize}
+	\item \emph{Sequence models} have been \emph{motivated} by the \emph{analysis} of \emph{sequential data} such as text sentences, time-series and other discrete sequences data.
+	\item These \emph{models} are designed to \emph{handle sequential information} in the same way that CNN are adapted to handle spatial data.
+	\item The \emph{key point} for \emph{sequence models} is that the \emph{data} we are processing are \emph{not independently and identically distributed} samples and the data carry some \emph{dependency} due to their \emph{sequential ordering}.
+	\item \emph{Applications} of sequence models $\dots$
+	\item Sequence modeling \emph{design criteria}:
+	\begin{itemize}
+		\item Handle \emph{variable-length sequences}.
+		\item Track \emph{long-term dependencies}.
+		\item Maintain \emph{information} about the \emph{order}.
+		\item \emph{Share parameters} across the sequence.
+	\end{itemize}
+	\item RNNs satisfy all of the design criteria for sequence modeling.
+\end{itemize}
+
+\section{Backpropagation Through Time}\label{sec:backpropagation-through-time}
+
+\section{LSTM Cell}\label{sec:lstm-cell}
+
+\section{LSTM Memory}\label{sec:lstm-memory}
+\begin{itemize}
+	\item The \emph{key} of an LSTM is the \emph{cell state}, the \emph{horizontal line} running through the top of the diagram.
+	\item The \emph{cell state} is like a \emph{conveyor belt}.
+	It's very \emph{easy} for \emph{information} to just \emph{flow} along it \emph{unchanged.}
+\end{itemize}
+
+\section{Forget Gate}\label{sec:forget-gate}
+\begin{itemize}
+	\item It looks at \data{$h^{t-1}$} and \data{$x^{t}$}, and \emph{outputs} a number between \data{$0$} and \data{$1$} for each number in the \emph{cell state} \data{$c^{t}$}.
+	\item \data{$1$} represents ``completely keep this'' while a \data{$0$} represents ``completely get rid of this''.
+\end{itemize}
+\begin{equation}
+	f^{t} = \sigma\left( w_{xf}x^{t} + w_{hf}h^{t-1} + b_{f} \right)
+	\label{eq:forget-gate}
+\end{equation}
+
+\section{Input Gate}\label{sec:input-gate}
+\begin{itemize}
+	\item First, a \emph{sigmoid layer} called the \emph{``input gate layer''} decides \emph{which values to update.}
+	\item Second, a \emph{tanh layer} creates a vector of \emph{new candidate values} \data{$c^{t}$}, that could be \emph{added} to the \emph{state}.
+\end{itemize}
+
+\begin{equation}
+	\begin{aligned}
+		i^{t} &= \sigma \left( w_{xi}x^{t} + w_{hi}h^{t-1} + b_{i} \right)\\
+		c'^{t} &= \tanh\left( w_{xc}x^{t} + w_{hc}h^{t-1} + b_{c} \right)
+	\end{aligned}
+	\label{eq:ignore-gate}
+\end{equation}
+
+\section{Updating Cell State}\label{sec:updating-cell-state}
+\begin{itemize}
+	\item Next, \emph{update} the \emph{old cell state} \data{$c^{t-1}$} into the new cell state \data{$c^{t}$}.
+	\item We use the \emph{Hadamard product} $\circ$ (\emph{element-wise} product).
+\end{itemize}
+
+\begin{equation}
+	c^{t} = f^{t} \circ c^{t-1} + i^{t} \circ c'^{t}
+	\label{eq:updating-cell-state}
+\end{equation}
+
+\section{Output Gate}\label{sec:output-gate}
+\begin{itemize}
+	\item A \emph{sigmoid layer decides} what \emph{parts} of the \emph{cell state} are going to be \emph{output}.
+	\item The \emph{cell state} is then put through \emph{tanh} (to make the values \data{$\in [-1, 1]$}) and this is \emph{element-wise multiplied} by the output of the sigmoid gate.
+\end{itemize}
+\begin{equation}
+	\begin{aligned}
+		o^{t}
+	\end{aligned}
+	\label{eq:output-gate}
+\end{equation}
+
+\section{Training LSTM}\label{sec:training-lstm}
+\begin{itemize}
+	\item An LSTM network is \emph{trained} with \hyperref[sec:backpropagation-through-time]{BPTT}.
+	\item In a \emph{vanilla RNN}, if \data{$h^{t} = \left( w_{xh}x^{t} + w_{hh}h^{t-1} \right)$}, then its \emph{derivative} is --
+	\begin{equation*}
+	\begin{aligned}
+		\frac{\partial h^{t}}{\partial h^{t-1}} = w_{hh}\sigma(\cdot) \left( 1 - \sigma(\cdot) \right)
+	\end{aligned}
+	\end{equation*}
+	\item However, for \emph{LSTM}, we have the \emph{cell state} \data{$c^{t} = f^{t} \circ c^{t-1} + i^{t} \circ c'^{t}$} and its \emph{derivative} is --
+	\begin{equation*}
+	\begin{aligned}
+		\frac{\partial c^{t}}{\partial c^{t-1}} = f^{t} = \sigma{\cdot}
+	\end{aligned}
+	\end{equation*}
+	\item This helps \emph{LSTM preserve} a \emph{constant error} when it is back-propagated.
+	\item The \emph{cells learn} when to allow data to \emph{enter, leave or delete} through the iterative process of \emph{back-propagating errors} and \emph{adjusting weights}.
+\end{itemize}
+
+\section{LSTM BPTT}\label{sec:lstm-bptt}
+\begin{equation*}
+\begin{aligned}[eqpurple]
+	o^{t} = \sigma \left( w_{xo}x^{t} + w_{ho} \right)
+\end{aligned}
+\end{equation*}
+
+\section{LSTM Example}\label{sec:lstm-example}
+\begin{itemize}
+	\item \emph{Cell state} and \emph{hidden state} represents \emph{long-term} and \emph{short-term} memory.
+	\item \emph{Forget gate} will decide \emph{how much} of the \emph{long-term memory} to \emph{pass on}.
+\end{itemize}
+
+\section{Gated Recurrent Unit}\label{sec:gated-recurrent-unit}
+\begin{itemize}
+	\item \emph{Similar performance} as \emph{LSTM} with \emph{less computation}.
+	\item \emph{GRUs} have \emph{fewer parameters} than LSTM, as they \emph{lack} an \emph{output gate}.
+\end{itemize}
+
+\section{Bidirectional RNN}\label{sec:bidirectional-rnn}
+\begin{itemize}
+	\item Output at \emph{time} \data{$t$} may \emph{not only depend} on the \emph{previous elements} in the sequence, but also \emph{future elements}.
+	\item They are just \emph{two RNNs stacked} on top of each other.
+	The \emph{output} is then \emph{computed} based on the \emph{hidden state} of \emph{both RNNs}.
+\end{itemize}
+
+\section{Seq2Seq}\label{sec:seq2seq}
+\begin{itemize}
+	\item Consists of \emph{two RNNs}:
+	\begin{itemize}
+		\item The \emph{encoder reads} the \emph{input} sequence and \emph{outputs a vector}.
+		\item The \emph{decoder reads} the \emph{vector} and \emph{produces} the \emph{output sequence}.
+	\end{itemize}
+	\item Primarily used in \emph{NLP} applications.
+\end{itemize}
+
+\section{Limitations of RNN}\label{sec:limitations-of-rnn}
+\begin{itemize}
+	\item Encoding bottleneck
+	\item Slow, no parallelization
+	\item Not long memory
+\end{itemize}
+
+\section{Desired Capabilities of RNN}\label{sec:desired-capabilities-of-rnn}
+\begin{itemize}
+	\item Continuous stream
+	\item Parallelization
+	\item Long memory
+\end{itemize}
+
+\end{document}

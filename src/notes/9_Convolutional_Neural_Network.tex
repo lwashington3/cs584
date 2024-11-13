@@ -84,4 +84,87 @@
 	\end{itemize}
 \end{itemize}
 
+\begin{description}[font=\emph]
+	\item[Spatial locality] features at nearby locations in an image are most likely to have joint causes and consequences.
+	\item[Spatial position homogeneity] features deemed significant in one region of an image are likely to be significant in others.
+	\item[Spatial scale homogeneity] locality and position homogeneity should apply across a range of spatial scales.
+\end{description}
+
+\section{Filter}\label{sec:filter}
+\begin{itemize}
+	\item At every \emph{convolutional layer}, we \emph{specify} how many \emph{filter kernels} we want.
+	\item \emph{Filter} is a \emph{matrix} used for blurring, sharpening, embossing, edge detection, and more.
+	The \emph{values} within this matrix are \emph{initialized} with \emph{random numbers}.
+\end{itemize}
+
+\section{Convolution}\label{sec:convolution}
+\begin{itemize}
+	\item \emph{Convolution} is a \emph{mathematical operation} on two \emph{functions} \data{$x$} and \data{$h$} that produces a third function \data{$x \times h$}.
+	\item For CNN, we denote \emph{convolution} as \data{$s_{i} = (x \times w)_{i}$}
+	\begin{description}
+		\item[$x$] the \emph{input}
+		\item[$w$] the \emph{filter}
+	\end{description}
+\end{itemize}
+
+\section{MNIST Dataset}\label{sec:mnist-dataset}
+
+\section{Image Analysis}\label{sec:image-analysis}
+\begin{itemize}
+	\item Assume there is a \emph{convolutional layer accepting handwritten digits} from the \emph{MNIST dataset} and trying to \emph{classify} them correctly.
+\end{itemize}
+
+\section{Pooling}\label{sec:pooling}
+\begin{itemize}
+	\item \emph{Reduces dimensionality} of the \emph{image progressively} as you \emph{go deeper} into the convolutional network.
+	\item This means every \emph{filter} now is being \emph{slid over} a \emph{smaller image}, thus it \emph{captures} a \emph{larger receptive field} from the previous layer.
+	\item Other benefits include \emph{spatial invariance} and \emph{increased efficiency}.
+\end{itemize}
+
+\section{Spatial Invariance}\label{sec:spatial-invariance}
+\begin{itemize}
+	\item \emph{Pooling} helps to make the \emph{representation} become \emph{approximately invariant} to small \emph{translations} of the input.
+	\item \emph{Invariance} to \emph{translation} means that \emph{if the input is translated by a small amount}, the values of most of the \emph{pooled outputs do not change.}
+	\item \emph{Invariance} to \emph{local translation} can be a very \emph{useful} property if we care more about \emph{whether some feature is present} than exactly where is is.
+	\item The use of \emph{pooling} can be viewed as \emph{adding} a \emph{strong prior} that the \emph{function the layer learns} must be \emph{invariant} to \emph{small translations}.
+\end{itemize}
+
+\section{Increased Efficiency}\label{sec:increased-efficiency}
+\begin{itemize}
+	\item Pooling units \emph{summarize detector units} by reporting \emph{summary statistics} for pooling regions spaced \data{$k$} \emph{pixels apart} rather than \emph{1 pixel apart}.
+\end{itemize}
+
+\section{Convolution + Activation + Pooling}\label{sec:convolution-+-activation-+-pooling}
+
+\section{Feature Maps}\label{sec:feature-maps}
+\begin{itemize}
+	\item As you progress through the layers, the \emph{feature maps} become \emph{increasingly complex} and \emph{abstract}.
+	\item \emph{Lower-level feature maps} detect simple \emph{edges} and \emph{shapes}, while \emph{deeper feature maps} encode high-level concepts, such as object parts or entire objects.
+	\item \emph{Feature maps} become \emph{sparser} as we go \emph{deeper}, meaning the \emph{filters detect less} features.
+	\item \emph{Deeper feature maps} contain \emph{less information} about the \emph{image} and \emph{more} about the \emph{class} of the image.
+\end{itemize}
+
+\section{Training a CNN}\label{sec:training-a-cnn}
+\begin{itemize}
+	\item The \emph{same procedure from backpropagation} applies here.
+	The error terms from the output layer is passed back to the previous layers, one by one.
+	\item \emph{Backpropagation} for the \emph{pooling} layer:
+	\begin{itemize}
+		\item Assuming \emph{max pooling}
+		\item The backpropagated error is \data{$\delta_{pool} - $}
+	\end{itemize}
+	\item Backpropagation for the \emph{convolutional layer}
+\end{itemize}
+
+\section{LeNet 5}\label{sec:lenet-5}
+\begin{itemize}
+	\item Designed by LeCun et al. for \emph{character recognition} in both handwriting and machine printing.
+\end{itemize}
+
+\section{VGGNet}\label{sec:vggnet}
+\begin{itemize}
+	\item Developed by Simonyan and Zisserman at the \emph{Visual Geometry Group} in Oxford University.
+	\item Main contribution was showing that \emph{depth} of the \emph{network} is a \emph{critical} component for \emph{good performance}.
+\end{itemize}
+
 \end{document}
