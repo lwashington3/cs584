@@ -1,0 +1,109 @@
+%! Author = Len Washington III
+%! Date = 11/20/24
+
+% Preamble
+\documentclass[
+	number={11},
+	title={Reinforcement Learning}
+]{cs584notes}
+
+% Document
+\begin{document}
+
+\section{TD Learning}\label{sec:td-learning}
+
+\begin{algorithm}[H]
+	\caption{Tabular TD(0) for estimating $v_{\pi}$}\label{alg:td}
+	\begin{algorithmic}[1]
+	\Function{TD}{$\pi$: the policy to be evaluated}
+		\State Initialize $V(s)$ arbitrarily (e.g., V(s) = 0, $\forall s \in S^{+}$)
+	\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{itemize}
+	\item Model-free
+	\item Off-policy
+	\item Discrete action and state spaces
+\end{itemize}
+
+\section{SARSA}\label{sec:sarsa}
+\begin{itemize}
+	\item \emph{SARSA} works by \emph{learning} a \emph{state-action value function} rather than a state value function like TD learning.
+	\item SARSA \emph{explore} the \emph{transitions}from one state-action pair to another state-action pair and \emph{learns} the \emph{state-action value function}.
+	\item In \emph{on-policy learning}, the \emph{optimal value function} is \emph{learned} from \emph{actions} taken using the \emph{current policy}.
+	\item \emph{Update} rule:
+	\begin{equation}
+		Q(S_{t}, A_{t}) =
+		\label{eq:sarsa}
+	\end{equation}
+	\item As in all on-policy methods, \data{$Q_{n}$} is \emph{continually esimated} for the \emph{policy} \data{$\pi$}, while the \emph{policy} \data{$\pi$} is \emph{updated} using an \emph{$\epsilon$-greedy policy}.
+	\begin{algorithm}[H]
+		\caption{$\epsilon$-Greedy Policy}\label{alg:}
+		\begin{algorithmic}[1]
+			\State $p \gets \Call{Random}{}$
+			\If{$p < \epsilon$}
+				\State pull random action
+			\Else
+				\State pull current-best action
+			\EndIf
+		\end{algorithmic}
+	\end{algorithm}
+	\begin{algorithm}[H]
+		\caption{SARSA (on-policy TD control)}\label{alg:sarsa}
+		\begin{algorithmic}[1]
+			\State Algorithm parameters: step size $\alpha \in (0, 1]$, small $\epsilon > 0$
+			\State Initialize $Q(s,a)$, for all $s \in S^{+}$, $a \in A(s)$, arbitrarily except that $Q(terminal,\cdot) = 0$
+			\Loop{for each episode:}
+				\State Initialize $S$
+				\State Choose $A$ from $S$ using policy derived from $Q$ (e.g., $\epsilon$-greedy)
+			\EndLoop
+		\end{algorithmic}
+	\end{algorithm}
+	\item Model-free.
+	\item On-policy.
+	\item Discrete action and state spaces.
+\end{itemize}
+
+\section{$Q$-Learning}\label{sec:q-learning}
+\begin{itemize}
+	\item \emph{$Q$-Learning} is very \emph{similar} to \emph{SARSA}.
+	The major \emph{difference} lies in the \emph{update rule} of the \emph{$Q$-function}.
+\end{itemize}
+
+\section{Deep $Q$-Learning}\label{sec:deep-q-learning}
+\begin{itemize}
+	\item For tasks with \emph{continuous state space}, \emph{updating} the \emph{Q-function} for \emph{all state-action pairs} can be \emph{computationally inefficient and infeasible}.
+	\item Rather than using value learning to directly find the optimal $Q$-function, a \emph{function estimator} can be used to \emph{estimate} the \emph{optimal $Q$-function}.
+	\item ANNs are effective function estimators.
+	\emph{Deep neural network} (DNN) can be used to \emph{estimate} the \emph{$Q$-function} for each \emph{state-action pairs}.
+	\item \emph{DQN} is \emph{trained} using \emph{batch stochastic gradient} updates and \emph{experience replay}.
+	Experience replay can interact with the environment to \emph{generate training data} for the DQN.
+	\item \emph{Experience replay} is a technique where the \emph{agent stores a subset} of its \emph{experiences} \data{$<s, a, r, s'>$} in a \emph{memory buffer} and \emph{samples} from this buffer to \emph{update} the \emph{Q-function}.
+	\item \emph{Experience replay selects} an \emph{$\epsilon$-greedy action} from the current state, executes it in the environment, and gets back a reward and the next state.
+	\item If DQN was trained with \emph{single samples}, each sample and the corresponding gradients
+	\item $\dots$
+	\item Model-free.
+	\item Off-policy.
+	\item Continuous state space.
+	\item Discrete action space.
+\end{itemize}
+
+\section{Policy Gradient Methods}\label{sec:policy-gradient-methods}
+\begin{itemize}
+	\item \emph{Policy gradient methods} learn a \emph{parameterized policy} than can \emph{select actions without} consulting a \emph{value function}.
+	The parameters of the policy are called \emph{policy weights}.
+	\item Policy gradient methods are methods for \emph{learning} the \emph{policy weights} using the \emph{gradient} of some \emph{performance measure} with respect to the policy weights.
+	\item Policy gradient methods seek to \emph{maximize performance} and so the \emph{policy weights} are updated \emph{using gradient ascent}.
+\end{itemize}
+
+\section{Actor-Critic}\label{sec:actor-critic}
+\begin{itemize}
+	\item \emph{Actor-Critic} method is a \emph{TD version} of \emph{policy gradient}.
+	It sues two neural networks, one \emph{actor network} and one \emph{critic network}.
+	\item The \emph{actor network decides} what \emph{action} should be taken and the \emph{critic network informs} the actor network \emph{how good} was the \emph{action} and how it should update to improve.
+	\item The \emph{learning} of the \emph{actor network} is based on \emph{policy gradient approach}.
+	\item
+\end{itemize}
+
+\end{document}
