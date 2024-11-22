@@ -14,7 +14,7 @@
 }
 
 \DeclareStringOption{exam}
-\DeclareStringOption[6pt]{fontsize}
+\DeclareStringOption[4pt]{fontsize}
 \DeclareBoolOption[true]{color}
 \DeclareBoolOption[true]{compact}
 \DeclareBoolOption[true]{showchapter}
